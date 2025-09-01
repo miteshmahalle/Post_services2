@@ -9,7 +9,7 @@ from controllers import (
     # division_esg_controller,
     # esg_controller,
     # brsr_controller,
-    validate_controller
+   # validate_controller
 )
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ app.register_blueprint(dashboard_controller.bp, url_prefix="/api/dashboard")
 # app.register_blueprint(division_esg_controller.division_bp, url_prefix="/api/division")
 # app.register_blueprint(esg_controller.bp, url_prefix="/api/esg")
 # app.register_blueprint(brsr_controller.bp, url_prefix="/api/brsr")
-app.register_blueprint(validate_controller.bp, url_prefix="/api/validate")
+# app.register_blueprint(validate_controller.bp, url_prefix="/api/validate")
 
 # Ensure reports folder exists
 if not os.path.exists('reports'):
