@@ -28,11 +28,31 @@ async function request<T>(
 
 // Auth APIs
 export const authApi = {
-  login: (username: string, password: string) =>
-    request<{ token: string }>("/auth/login", {
+  login: async (username: string, password: string) => {
+    const res = await request<{
+      message: string;
+      token: string;
+      user: {
+        user_id: number;
+        username: string;
+        role: string;
+        branch_id: number;
+        branch_name: string;
+        branch_code: string;
+        manager_name: string;
+        email: string;
+        phone: string;
+        parent_id: number | null;
+        address: string;
+      };
+    }>("/auth/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),
-    }),
+    });
+
+    // Return the response exactly as received from server
+    return res;
+  },
 
   register: (username: string, password: string) =>
     request<{ message: string }>("/auth/register", {

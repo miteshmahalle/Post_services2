@@ -1,11 +1,15 @@
 from flask import Blueprint, request, jsonify
 import mysql.connector
+
+# ✅ Import full config
 import config
+SECRET_KEY = config.SECRET_KEY
 
 bp = Blueprint('validate', __name__)
 
 def get_db_connection():
     return mysql.connector.connect(**config.DB_CONFIG)
+
 
 @bp.route('/registration', methods=['POST'])
 def validate_registration():
