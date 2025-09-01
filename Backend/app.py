@@ -5,7 +5,7 @@ import os
 # Import blueprints from controllers
 from controllers import (
     auth_controller,
-    # dashboard_controller,
+    dashboard_controller,
     # division_esg_controller,
     # esg_controller,
     # brsr_controller,
@@ -20,7 +20,7 @@ CORS(app)
 
 # Register Blueprints
 app.register_blueprint(auth_controller.bp, url_prefix="/api/auth")
-# app.register_blueprint(dashboard_controller.bp, url_prefix="/api/dashboard")
+app.register_blueprint(dashboard_controller.bp, url_prefix="/api/dashboard")
 # app.register_blueprint(division_esg_controller.division_bp, url_prefix="/api/division")
 # app.register_blueprint(esg_controller.bp, url_prefix="/api/esg")
 # app.register_blueprint(brsr_controller.bp, url_prefix="/api/brsr")
