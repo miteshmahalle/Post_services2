@@ -8,6 +8,7 @@ import Navbar from "./components/navbar";
 
 // Import dashboards
 import BranchDashboard from "./pages/BranchDashboard";
+import BranchESGForm from "./pages/BranchESGForm"; // ✅ NEW Import
 import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
 
@@ -31,6 +32,16 @@ function App() {
           element={
             <PrivateRoute>
               <BranchDashboard/>
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ NEW: Branch ESG Form Route */}
+        <Route
+          path="/branch-esg-form"
+          element={
+            <PrivateRoute>
+              <BranchESGForm />
             </PrivateRoute>
           }
         />
