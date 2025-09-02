@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../slices/authSlice";
+import { loginSuccess, logout } from "../slices/authSlice";
 import { authApi } from "../api";
 import React, { useState } from "react";
-import "../style/login.css"; // <-- import CSS
+import { FiEye, FiEyeOff } from "react-icons/fi"; // ✅ icons
+import "../style/login.css";
+import logo from "../images/India-Post-Color.png";
 
 interface LoginResponse {
   message: string;
@@ -23,6 +25,12 @@ interface LoginResponse {
   };
 }
 
+// ✅ Eye icon wrapper
+const EyeIcon: React.FC<{ show: boolean }> = ({ show }) => {
+  const Icon = (show ? FiEyeOff : FiEye) as React.ElementType;
+  return <Icon className="eye-icon" size={18} />;
+};
+
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,7 +46,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = (await authApi.login(username, password)) as LoginResponse;
+      const res = await authApi.login(username, password) as LoginResponse;
 
       dispatch(
         loginSuccess({
@@ -75,8 +83,39 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-page">
+      {/* ✅ Government Header with India Post Logo */}
+      <div className="govt-header-section">
+        <img 
+          src={logo} 
+          alt="India Post Logo" 
+          className="india-post-logo"
+        />
+        <div className="govt-header-text">
+          <h2>भारतीय डाक</h2>
+          <p>India Post</p>
+        </div>
+      </div>
+
+      {/* ✅ Stylish Logout button top-right */}
+      {/* <button
+        className="logout-btn"
+        onClick={() => {
+          dispatch(logout());
+          navigate("/login");
+        }}
+      >
+        Logout
+      </button> */}
+
       <div className="login-box">
-        {/* Header */}
+        {/* ✅ Logo in the circle above login box */}
+        <img 
+          src={logo} 
+          alt="India Post Logo" 
+          className="login-box-logo"
+        />
+        
+        {/* ✅ Keep header inside login card */}
         <h1>BRSR Report</h1>
         <p>Postal Services Management System</p>
 
@@ -112,7 +151,7 @@ const LoginPage: React.FC = () => {
             className="toggle-btn"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? "Hide" : "Show"}
+            <EyeIcon show={showPassword} />
           </button>
         </div>
 

@@ -3,10 +3,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #dc2626 0%, #b91c1c  100%);
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
   color: white;
   padding: 12px 24px;
   position: relative;
+  flex-wrap: wrap; /* ✅ allow wrapping on smaller screens */
 }
 
 .govt-header-section {
@@ -57,7 +58,8 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px; /* ✅ added more gap between buttons */
+  flex-shrink: 0;
 }
 
 /* === Unified Button Styles (Branch + Logout) === */
@@ -72,6 +74,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  white-space: nowrap; /* ✅ prevent text from breaking */
 }
 
 /* Hover Effect */
@@ -91,7 +94,8 @@
   position: absolute;
   top: 120%;
   right: 0;
-background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);  color: #000;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  color: #000;
   border: 1px solid #ccc;
   padding: 12px;
   border-radius: 8px;
@@ -143,6 +147,11 @@ background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);  col
     padding: 6px 12px;
     font-size: 0.85rem;
   }
+
+  .header-right {
+    gap: 12px; /* ✅ keep smaller gap on mobile */
+    flex-wrap: wrap; /* ✅ stack buttons if needed */
+  }
 }
 
 @media (max-width: 480px) {
@@ -166,5 +175,10 @@ background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);  col
 
   .govt-header-text p {
     font-size: 0.75rem;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: flex-end;
   }
 }
