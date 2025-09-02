@@ -6,10 +6,10 @@ import os
 from controllers import (
     auth_controller,
     dashboard_controller,
-    # division_esg_controller,
-    # esg_controller,
-    # brsr_controller,
-   # validate_controller
+    division_esg_controller,
+    branch_esg_controller,
+    #brsr_controller,
+    validate_controller
 )
 
 app = Flask(__name__)
@@ -21,10 +21,10 @@ CORS(app)
 # Register Blueprints
 app.register_blueprint(auth_controller.bp, url_prefix="/api/auth")
 app.register_blueprint(dashboard_controller.bp, url_prefix="/api/dashboard")
-# app.register_blueprint(division_esg_controller.division_bp, url_prefix="/api/division")
-# app.register_blueprint(esg_controller.bp, url_prefix="/api/esg")
-# app.register_blueprint(brsr_controller.bp, url_prefix="/api/brsr")
-# app.register_blueprint(validate_controller.bp, url_prefix="/api/validate")
+app.register_blueprint(division_esg_controller.bp, url_prefix="/api/division_esg")
+app.register_blueprint(branch_esg_controller.bp, url_prefix="/api/branch_esg")
+#app.register_blueprint(brsr_controller.bp, url_prefix="/api/brsr")
+app.register_blueprint(validate_controller.bp, url_prefix="/api/validate")
 
 # Ensure reports folder exists
 if not os.path.exists('reports'):

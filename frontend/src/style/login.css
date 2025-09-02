@@ -1,0 +1,345 @@
+/* Government website styling for BRSR Report - India Post */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Government header with logo */
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+  border-bottom: 4px solid #fbbf24;
+  z-index: 1;
+}
+
+/* Government Header Section with Logo */
+.govt-header-section {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  gap: 15px;
+}
+
+/* India Post Logo Styling */
+.india-post-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Government Header Text */
+.govt-header-text {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.govt-header-text h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.govt-header-text p {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  opacity: 0.95;
+}
+
+/* Card container - Government styling */
+.login-box {
+  width: 100%;
+  max-width: 450px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.1),
+    0 4px 10px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  margin-top: 100px;
+  position: relative;
+  z-index: 3;
+}
+
+/* Government emblem decoration with logo */
+/* .login-box::before {
+  content: '';
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 20%;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+} */
+
+/* Logo inside the circle */
+ .login-box-logo {
+    content: '';
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 20%;
+ }
+
+/* Header inside card */
+.login-box h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  letter-spacing: -0.5px;
+}
+
+.login-box p {
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+/* Error message - Government red */
+.error-message {
+  background: linear-gradient(90deg, #fef2f2, #fee2e2);
+  color: #dc2626;
+  font-size: 0.9rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #dc2626;
+  text-align: left;
+}
+
+/* Input fields - Government styling */
+.login-input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.login-input:focus {
+  border-color: #dc2626;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(220, 38, 38, 0.1);
+  background: #ffffff;
+}
+
+.login-input::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Password wrapper */
+.password-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.password-wrapper .login-input {
+  margin-bottom: 0;
+}
+
+.password-wrapper .toggle-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.password-wrapper .toggle-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.eye-icon {
+  color: #dc2626;
+  font-size: 1.1rem;
+}
+
+/* Login button - Government style */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 
+    0 4px 8px rgba(220, 38, 38, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 12px rgba(220, 38, 38, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+.login-btn:disabled {
+  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Footer - Government styling */
+.login-footer {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Logout button - Government red */
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 2rem;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 4;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.4);
+}
+
+/* Removed tricolor accent line */
+
+/* Additional government styling elements */
+.login-box::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .govt-header-section {
+    left: 15px;
+    top: 18px;
+    gap: 10px;
+  }
+  
+  .india-post-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .govt-header-text h2 {
+    font-size: 1.1rem;
+  }
+  
+  .govt-header-text p {
+    font-size: 0.8rem;
+  }
+  
+  .logout-btn {
+    right: 1rem;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+  
+  .login-box {
+    max-width: 350px;
+    padding: 2rem;
+    margin-top: 120px;
+  }
+  
+  .login-box h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .govt-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .govt-header-text h2 {
+    font-size: 1rem;
+  }
+  
+  .govt-header-text p {
+    font-size: 0.75rem;
+  }
+  
+  .login-box {
+    margin-top: 130px;
+    padding: 1.5rem;
+  }
+}

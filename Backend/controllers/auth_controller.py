@@ -1,14 +1,22 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
-import config
 import jwt
 import datetime
+
+# ✅ Import your config properly
+import config  
+
+SECRET_KEY = config.SECRET_KEY   # pull from config.py
+
+print("🔎 Loaded config from:", config.__file__)
+print("🔎 DB_CONFIG:", getattr(config, "DB_CONFIG", None))
 
 bp = Blueprint('auth', __name__)
 
 def get_db_connection():
     return mysql.connector.connect(**config.DB_CONFIG)
+
 
 # ---------------- REGISTER ----------------
 @bp.route('/register', methods=['POST'])
@@ -69,6 +77,7 @@ def register():
         cur.close()
         conn.close()
 
+
 # ---------------- LOGIN ----------------
 @bp.route('/login', methods=['POST'])
 def login():
@@ -78,8 +87,29 @@ def login():
 
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
-    cur.execute("SELECT * FROM users WHERE username=%s", (username,))
+
+    # ✅ Query with JOIN to fetch branch details
+    cur.execute("""
+        SELECT 
+            u.user_id,
+            u.role,
+            u.branch_id,
+            u.username,
+            b.branch_name,
+            b.branch_code,
+            b.manager_name,
+            b.email,
+            b.phone,
+            b.parent_id,
+            b.address,
+            u.password_hash
+        FROM postal_system.users u
+        LEFT JOIN postal_system.branches b 
+            ON u.branch_id = b.branch_id
+        WHERE u.username = %s
+    """, (username,))
     user = cur.fetchone()
+
     cur.close()
     conn.close()
 
@@ -96,7 +126,24 @@ def login():
         }
         token = jwt.encode(payload, config.SECRET_KEY, algorithm='HS256')
 
-        return jsonify({"message": "Login successful", "token": token}), 200
+        # ✅ Return token + extra details
+        return jsonify({
+            "message": "Login successful",
+            "token": token,
+            "user": {
+                "user_id": user['user_id'],
+                "username": user['username'],
+                "role": user['role'],
+                "branch_id": user['branch_id'],
+                "branch_name": user['branch_name'],
+                "branch_code": user['branch_code'],
+                "manager_name": user['manager_name'],
+                "email": user['email'],
+                "phone": user['phone'],
+                "parent_id": user['parent_id'],
+                "address": user['address']
+            }
+        }), 200
     else:
         return jsonify({"error": "Invalid credentials"}), 401
 
