@@ -1,0 +1,170 @@
+/* ===== HEADER STYLES ===== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c  100%);
+  color: white;
+  padding: 12px 24px;
+  position: relative;
+}
+
+.govt-header-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.govt-header-text h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.govt-header-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #f5f5f5;
+}
+
+.india-post-logo {
+  width: 50px;
+  height: 50px;
+}
+
+/* ===== CENTER TITLE ===== */
+.header-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.header-subtitle {
+  margin: 2px 0 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #ffe6e6; /* soft shade for subtitle */
+}
+
+/* ===== RIGHT SIDE ===== */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* === Unified Button Styles (Branch + Logout) === */
+.branch-name,
+.logout-btn {
+  background-color: #fff;
+  color: #b30000;
+  border: 2px solid #b91c1c;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover Effect */
+.branch-name:hover,
+.logout-btn:hover {
+  background-color: #f35050;
+  color: #fff;
+}
+
+/* Branch Details Hover Card */
+.branch-info {
+  position: relative;
+}
+
+.branch-details-card {
+  display: none;
+  position: absolute;
+  top: 120%;
+  right: 0;
+background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);  color: #000;
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.15);
+  min-width: 220px;
+  z-index: 1000;
+}
+
+.branch-details-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.branch-info:hover .branch-details-card {
+  display: block;
+}
+
+/* ✅ Responsive Adjustments */
+@media (max-width: 768px) {
+  .govt-header-section {
+    gap: 10px;
+  }
+
+  .india-post-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .govt-header-text h2 {
+    font-size: 1rem;
+  }
+
+  .govt-header-text p {
+    font-size: 0.8rem;
+  }
+
+  .header-title {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .header-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .branch-name,
+  .logout-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .govt-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .header-title {
+    font-size: 0.9rem;
+  }
+
+  .header-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .govt-header-text h2 {
+    font-size: 0.9rem;
+  }
+
+  .govt-header-text p {
+    font-size: 0.75rem;
+  }
+}

@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const res: LoginResponse = await authApi.login(username, password);
+      const res = (await authApi.login(username, password)) as LoginResponse;
 
       dispatch(
         loginSuccess({

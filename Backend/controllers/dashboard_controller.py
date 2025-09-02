@@ -46,7 +46,6 @@ def token_required(f):
 
 # ===========================
 # Branch Dashboard
-# ===========================
 @bp.route('/branch', methods=['GET'])
 @token_required
 def branch_dashboard(user):
@@ -69,16 +68,39 @@ def branch_dashboard(user):
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
 
-    # Fetch submitted reports
-    cur.execute("""
-        SELECT DATE_FORMAT(reporting_month, '%%Y-%%m') AS month_key
-        FROM esg_data
-        WHERE branch_id = %s AND YEAR(reporting_month) = %s
-    """, (branch_id, current_year))
-    submitted = {row['month_key'] for row in cur.fetchall()}
+    try:
+        # Fetch submitted reports with enhanced query
+        query = """
+            SELECT DISTINCT DATE_FORMAT(reporting_month, %s) AS month_key
+            FROM esg_data
+            WHERE branch_id = %s AND YEAR(reporting_month) = %s
+            ORDER BY month_key
+        """
+        
+        cur.execute(query, ('%Y-%m', branch_id, current_year))
+        results = cur.fetchall()
+        
+        # Create set of submitted months
+        submitted = {row['month_key'] for row in results}
 
-    cur.close()
-    conn.close()
+        # Alternative approach - also try with string conversion for safety
+        if not submitted:
+            cur.execute("""
+                SELECT DISTINCT DATE_FORMAT(reporting_month, %s) AS month_key
+                FROM esg_data
+                WHERE CAST(branch_id AS CHAR) = %s AND YEAR(reporting_month) = %s
+                ORDER BY month_key
+            """, ('%Y-%m', str(branch_id), current_year))
+            
+            alt_results = cur.fetchall()
+            if alt_results:
+                submitted = {row['month_key'] for row in alt_results}
+
+    except Exception as e:
+        submitted = set()
+    finally:
+        cur.close()
+        conn.close()
 
     # Mark submitted months
     for month in months:

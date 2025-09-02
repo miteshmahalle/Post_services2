@@ -20,7 +20,7 @@ const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) 
 function App() {
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         {/* Public Route */}
         <Route path="/login" element={<Login />} />
@@ -30,7 +30,7 @@ function App() {
           path="/branch-dashboard"
           element={
             <PrivateRoute>
-              <BranchDashboard currentYear={new Date().getFullYear()} months={[]} />
+              <BranchDashboard/>
             </PrivateRoute>
           }
         />

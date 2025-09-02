@@ -1,55 +1,41 @@
-// src/pages/BranchDashboard.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { dashboardApi } from "../api";
+import Dashboard from "../components/monthdashboard";
+import Header from "../components/Header";  // ✅ Import Header
+import "../style/branchdashboard.css";      // ✅ Import CSS file
 
-interface Month {
-  name: string;
-  value: string;
-  submitted: boolean;
+interface DashboardData {
+  branch_id: number;
+  months: { name: string; submitted: boolean; value: string }[];
+  year: number;
 }
 
-interface BranchDashboardProps {
-  currentYear: number;
-  months: Month[];
-}
+const BranchDashboard: React.FC = () => {
+  const [data, setData] = useState<DashboardData | null>(null);
 
-const BranchDashboard: React.FC<BranchDashboardProps> = ({ currentYear, months }) => {
+  // ✅ get token from Redux authSlice
+  const token = useSelector((state: any) => state.auth.token);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!token) return; // wait until token is ready
+        const result = await dashboardApi.getBranchDashboard(token);
+        setData(result as DashboardData);
+      } catch (error) {
+        console.error("Error loading dashboard:", error);
+      }
+    };
+    fetchData();
+  }, [token]);
+
+  if (!data) return <p className="loading-text">Loading...</p>; // ✅ Use CSS class
+
   return (
-    <div className="container my-5">
-      <div className="card shadow border-0">
-        <div className="card-header bg-primary text-white text-center">
-          <h4 className="mb-0">Branch Dashboard — {currentYear}</h4>
-        </div>
-        <div className="card-body">
-          <div className="row row-cols-2 row-cols-md-4 g-3">
-            {months.map((month, index) => (
-              <div className="col" key={index}>
-                <div
-                  className={`card text-center ${
-                    month.submitted ? "border-success" : "border-danger"
-                  }`}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title">{month.name}</h5>
-                    {month.submitted ? (
-                      <span className="badge bg-success">Submitted</span>
-                    ) : (
-                      <button
-                        className="btn btn-sm btn-outline-primary mt-2"
-                        onClick={() => {
-                          // Navigate to ESG report submission page
-                          window.location.href = `/submit-esg/${month.value}`;
-                        }}
-                      >
-                        File Report
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="branch-dashboard">
+      <Header /> {/* ✅ Added Header */}
+      <Dashboard months={data.months} year={data.year} />
     </div>
   );
 };

@@ -1,68 +1,52 @@
 // src/api.ts
-const API_BASE_URL = "http://localhost:5000/api"; // change to your backend base URL
+import axios from "axios";
 
-// Helper function for requests
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-    ...options,
-  });
+const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
 
-  if (!res.ok) {
-    let errorMsg = "Something went wrong";
-    try {
-      const err = await res.json();
-      errorMsg = err.message || errorMsg;
-    } catch (_) {}
-    throw new Error(errorMsg);
-  }
-
-  return res.json();
-}
-
-// Auth APIs
+// ---------------- AUTH APIs ----------------
 export const authApi = {
   login: async (username: string, password: string) => {
-    const res = await request<{
-      message: string;
-      token: string;
-      user: {
-        user_id: number;
-        username: string;
-        role: string;
-        branch_id: number;
-        branch_name: string;
-        branch_code: string;
-        manager_name: string;
-        email: string;
-        phone: string;
-        parent_id: number | null;
-        address: string;
-      };
-    }>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-    });
-
-    // Return the response exactly as received from server
-    return res;
+    const res = await api.post("/auth/login", { username, password });
+    return res.data; // { message, token, user }
   },
 
-  register: (username: string, password: string) =>
-    request<{ message: string }>("/auth/register", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-    }),
+  register: async (username: string, password: string) => {
+    const res = await api.post("/auth/register", { username, password });
+    return res.data; // { message }
+  },
 
-  validateToken: (token: string) =>
-    request<{ valid: boolean }>("/auth/validate", {
-      method: "POST",
+  validateToken: async (token: string) => {
+    const res = await api.post(
+      "/auth/validate",
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return res.data; // { valid: boolean }
+  },
+};
+
+// ---------------- DASHBOARD APIs ----------------
+export const dashboardApi = {
+  getBranchDashboard: async (token: string) => {
+    const res = await api.get("/dashboard/branch", {
       headers: { Authorization: `Bearer ${token}` },
-    }),
+    });
+    return res.data; // { branch_id, months, year }
+  },
+
+  getDivisionDashboard: async (token: string) => {
+    const res = await api.get("/dashboard/division", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
+
+  getCircleDashboard: async (token: string) => {
+    const res = await api.get("/dashboard/circle", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
 };

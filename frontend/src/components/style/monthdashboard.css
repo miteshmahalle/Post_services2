@@ -1,0 +1,41 @@
+.dashboard-container {
+  padding: 20px;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #f35050
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3 rows * 4 columns */
+  gap: 15px;
+}
+
+.month-card {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.month-card:hover {
+  transform: scale(1.05);
+}
+
+.submitted {
+  background-color: #4caf50; /* green */
+  color: white;
+}
+
+.not-submitted {
+  background-color: #f28b82; /* red */
+  color: black;
+}
