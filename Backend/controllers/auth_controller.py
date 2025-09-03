@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 import jwt
 import datetime
+from functools import wraps
 
 # ✅ Import your config properly
 import config  
@@ -16,6 +17,32 @@ bp = Blueprint('auth', __name__)
 
 def get_db_connection():
     return mysql.connector.connect(**config.DB_CONFIG)
+
+# ---------------- HELPER: TOKEN REQUIRED ----------------
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        # Get token from header
+        if "Authorization" in request.headers:
+            auth_header = request.headers["Authorization"]
+            if auth_header.startswith("Bearer "):
+                token = auth_header.split(" ")[1]
+
+        if not token:
+            return jsonify({"error": "Token is missing!"}), 401
+
+        try:
+            decoded = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            request.current_user = decoded
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token has expired!"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token!"}), 401
+
+        return f(*args, **kwargs)
+    return decorated
 
 
 # ---------------- REGISTER ----------------
@@ -88,7 +115,6 @@ def login():
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
 
-    # ✅ Query with JOIN to fetch branch details
     cur.execute("""
         SELECT 
             u.user_id,
@@ -124,9 +150,8 @@ def login():
             'branch_id': user['branch_id'],
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
         }
-        token = jwt.encode(payload, config.SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-        # ✅ Return token + extra details
         return jsonify({
             "message": "Login successful",
             "token": token,
@@ -147,7 +172,143 @@ def login():
     else:
         return jsonify({"error": "Invalid credentials"}), 401
 
+
 # ---------------- LOGOUT ----------------
 @bp.route('/logout', methods=['POST'])
 def logout():
     return jsonify({"message": "Logged out successfully"}), 200
+
+
+# ---------------- GET PROFILE ----------------
+@bp.route('/profile', methods=['GET'])
+@token_required
+def get_profile():
+    current_user = request.current_user
+    user_id = current_user['user_id']
+    
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    
+    try:
+        cur.execute("""
+            SELECT 
+                u.user_id,
+                u.role,
+                u.branch_id,
+                u.username,
+                b.branch_name,
+                b.branch_code,
+                b.manager_name,
+                b.email,
+                b.phone,
+                b.parent_id,
+                b.address,
+                b.pincode,
+                b.state
+            FROM postal_system.users u
+            LEFT JOIN postal_system.branches b 
+                ON u.branch_id = b.branch_id
+            WHERE u.user_id = %s
+        """, (user_id,))
+        user_profile = cur.fetchone()
+        
+        if not user_profile:
+            return jsonify({"error": "User profile not found"}), 404
+            
+        return jsonify({
+            "message": "Profile retrieved successfully",
+            "profile": user_profile
+        }), 200
+        
+    except mysql.connector.Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+
+# ---------------- UPDATE PROFILE ----------------
+# ---------------- UPDATE PROFILE ----------------
+@bp.route('/profile', methods=['PUT'])
+@token_required
+def update_profile():
+    current_user = request.current_user
+    user_id = current_user['user_id']
+    branch_id = current_user['branch_id']
+    
+    data = request.get_json()
+    
+    manager_name = data.get('manager_name')
+    email = data.get('email')
+    phone = data.get('phone')
+    address = data.get('address')
+    pincode = data.get('pincode')
+    state = data.get('state')
+    
+    # ✅ branch_name removed from required fields
+    if not (manager_name and email):
+        return jsonify({"error": "Manager name and email are required"}), 400
+    
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    
+    try:
+        # Check if email already exists for another branch
+        cur.execute("SELECT branch_id FROM branches WHERE email = %s AND branch_id != %s", (email, branch_id))
+        if cur.fetchone():
+            return jsonify({"error": "Email already exists for another branch"}), 400
+        
+        # Check if phone already exists for another branch
+        if phone:
+            cur.execute("SELECT branch_id FROM branches WHERE phone = %s AND branch_id != %s", (phone, branch_id))
+            if cur.fetchone():
+                return jsonify({"error": "Phone number already exists for another branch"}), 400
+        
+        # ✅ branch_name not included in update
+        cur.execute("""
+            UPDATE branches 
+            SET manager_name = %s, email = %s, 
+                phone = %s, address = %s, pincode = %s, state = %s
+            WHERE branch_id = %s
+        """, (manager_name, email, phone, address, pincode, state, branch_id))
+        
+        if cur.rowcount == 0:
+          return jsonify({"message": "No changes were made"}), 200
+        
+        conn.commit()
+        
+        # Fetch updated profile
+        cur.execute("""
+            SELECT 
+                u.user_id,
+                u.role,
+                u.branch_id,
+                u.username,
+                b.branch_name,
+                b.branch_code,
+                b.manager_name,
+                b.email,
+                b.phone,
+                b.parent_id,
+                b.address,
+                b.pincode,
+                b.state
+            FROM postal_system.users u
+            LEFT JOIN postal_system.branches b 
+                ON u.branch_id = b.branch_id
+            WHERE u.user_id = %s
+        """, (user_id,))
+        updated_profile = cur.fetchone()
+        
+        return jsonify({
+            "message": "Profile updated successfully",
+            "profile": updated_profile
+        }), 200
+        
+    except mysql.connector.Error as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
