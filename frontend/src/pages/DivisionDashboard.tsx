@@ -2,14 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../components/Header"; // ✅ Top header
-import Sidebar from "../components/sidebar"; // ✅ Sidebar
+import DivisionSidebar from "../components/divisionsidebar"; // ✅ Sidebar
 import { dashboardApi } from "../api"; // ✅ Import dashboardApi
-import "../style/branchdashboard.css"; // ✅ Reuse same layout CSS
+import "../style/divisiondashboard.css"; // ✅ Use new CSS
+import { Navigation } from "lucide-react";
+import Dashboard from "../components/monthdashboard";
 
 interface Month {
   name: string;
   value: string;
   submitted: boolean;
+}
+
+interface NavigationProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 interface Branch {
@@ -28,6 +35,7 @@ interface Stats {
 }
 
 interface DivisionDashboardData {
+  year: number;
   currentYear: number;
   username: string;
   role: string;
@@ -42,7 +50,10 @@ const DivisionDashboard: React.FC = () => {
 
   // ✅ Get token from Redux
   const token = useSelector((state: any) => state.auth.token);
-
+  const user = useSelector((state: any) => state.auth.user);
+  
+ const [isNavOpen, setIsNavOpen] = useState(false);
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
@@ -59,64 +70,43 @@ const DivisionDashboard: React.FC = () => {
   if (!data) return <p className="loading-text">Loading Division Dashboard...</p>;
 
   return (
-    <div className="branch-dashboard">
+    <div className="division-dashboard">
       <Header /> {/* ✅ Top header */}
+      <nav className="main-navigation">
+        <div className="nav-container">
+          <button 
+            className="hamburger-menu"
+            onClick={() => setIsNavOpen(!isNavOpen)}
+          >
+            ☰
+          </button>
+          <ul className="nav-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#reports">Reports</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#notifications">Notifications</a></li>
+          </ul>
+        </div>
+      </nav>
       <div className="dashboard-layout">
-        <Sidebar
-          isOpen={false}
-          onClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+        <DivisionSidebar
         />
         <div className="dashboard-content">
-          {/* Title */}
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2 className="text-primary">Division Dashboard – {data.currentYear}</h2>
-            <div>
-              Logged in as <strong>{data.username}</strong> ({data.role})
-            </div>
-          </div>
+        {/* Welcome Message */}
+        <div className="welcome-section">
+          <h2>Welcome, {user?.manager_name}</h2>
+          <p>Last logged in on {new Date().toLocaleDateString()}</p>
+        </div>
 
-          {/* KPI Cards */}
-          <div className="row g-3 mb-4">
-            <div className="col-md-3">
-              <div className="card p-3 shadow-sm">
-                <h6 className="mb-1">Branches</h6>
-                <h3>{data.branchesCount}</h3>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card p-3 shadow-sm">
-                <h6 className="mb-1">Avg Energy (kWh)</h6>
-                <h3>{data.stats.avg_energy_kwh || 0}</h3>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card p-3 shadow-sm">
-                <h6 className="mb-1">Total Energy Bill</h6>
-                <h3>₹ {data.stats.total_energy_bill || 0}</h3>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card p-3 shadow-sm">
-                <h6 className="mb-1">Training Hours</h6>
-                <h3>{data.stats.total_training_hours || 0}</h3>
-              </div>
-            </div>
-          </div>
-
-          {/* Generate Report */}
-          <div className="mb-4 text-center">
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={() => {
-                window.location.href = "/generate-brsr";
-              }}
-            >
-              📊 Generate BRSR Report
-            </button>
+        {/* Main Dashboard Content */}
+        <div className="dashboard-main">
+        
+          <div className="dashboard-right">
+            <Dashboard months={data.months} year={data.year} />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

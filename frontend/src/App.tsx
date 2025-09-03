@@ -10,6 +10,7 @@ import Login from "./pages/login";
 import Homepage from "./pages/Homepage";
 import BranchDashboard from "./pages/BranchDashboard";
 import BranchESGForm from "./pages/BranchESGForm";
+import DivisionESGForm from "./pages/DivisionESGForm";
 import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
 
@@ -55,6 +56,15 @@ function App() {
           element={
             <PrivateRoute>
               <BranchESGForm />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/division-esg-form"
+          element={
+            <PrivateRoute>
+              <DivisionESGForm />
             </PrivateRoute>
           }
         />

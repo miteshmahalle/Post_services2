@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { dashboardApi } from "../api";
 import Header from "../components/Header";
 import "../style/branchESGForm.css";
+import { useLocation } from "react-router-dom";
+
 
 interface ESGFormData {
   reporting_month: string;
@@ -29,18 +31,18 @@ interface ESGErrors {
   complaints_count?: string;
 }
 
-const BranchESGForm: React.FC = () => {
+const DivisionESGForm: React.FC = () => {
   const navigate = useNavigate();
   const token = useSelector((state: any) => state.auth.token);
   const user = useSelector((state: any) => state.auth.user);
-
-   // Extract query params from URL
+  
+ // Extract query params from URL
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const month = searchParams.get("month"); // e.g. "2025-03"
-  
+
   const [formData, setFormData] = useState<ESGFormData>({
-    reporting_month: month || new Date().toISOString().slice(0, 7), // Current month in YYYY-MM format
+    reporting_month: month || new Date().toISOString().slice(0, 7), // use month from URL if available
     energy_bill: "",
     energy_kwh: "",
     fuel_litres: "",
@@ -92,9 +94,9 @@ const BranchESGForm: React.FC = () => {
     setIsSubmitting(true);
     try {
       // Call API to submit ESG data
-      await dashboardApi.submitBranchESG(token, formData);
+      await dashboardApi.submitDivisionESG(token, formData);
       alert("ESG Report submitted successfully!");
-      navigate("/branch-dashboard");
+      navigate("/division-dashboard");
     } catch (error) {
       console.error("Error submitting ESG report:", error);
       alert("Error submitting ESG report. Please try again.");
@@ -278,7 +280,7 @@ const BranchESGForm: React.FC = () => {
                 <div className="form-actions">
                   <button
                     type="button"
-                    onClick={() => navigate("/branch-dashboard")}
+                    onClick={() => navigate("/division-dashboard")}
                     className="btn btn-secondary"
                   >
                     <span className="btn-icon">←</span>
@@ -302,4 +304,4 @@ const BranchESGForm: React.FC = () => {
   );
 };
 
-export default BranchESGForm;
+export default DivisionESGForm;

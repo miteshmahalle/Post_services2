@@ -57,5 +57,13 @@ export const dashboardApi = {
     });
     return res.data; // { message, success }
   },
+
+   // ✅ NEW: Submit Branch ESG Report
+  submitDivisionESG: async (token: string, esgData: any) => {
+    const res = await api.post("/division_esg/submit", esgData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // { message, success }
+  },
   
 };

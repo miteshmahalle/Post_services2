@@ -1,0 +1,69 @@
+/* src/style/divisionSidebar.css */
+
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #ffffff;
+  border-radius: 0 20px 20px 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar-header {
+  padding: 20px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #b91c1c; /* red shade */
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.nav-section,
+.support-section {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item,
+.support-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  background: #f9f9f9;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover,
+.support-item:hover {
+  background: #f3f3f3;
+}
+
+.nav-item-active {
+  background: #b91c1c;
+  color: white;
+}
+
+.support-item-active {
+  background: #333;
+  color: white;
+}
+
+.sidebar svg {
+  min-width: 20px;
+  min-height: 20px;
+}
