@@ -1,9 +1,10 @@
+// src/pages/login.tsx
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginSuccess, logout } from "../slices/authSlice";
+import { loginSuccess } from "../slices/authSlice"; // removed unused logout
 import { authApi } from "../api";
 import React, { useState } from "react";
-import { FiEye, FiEyeOff } from "react-icons/fi"; // ✅ icons
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "../style/login.css";
 import logo from "../images/India-Post-Color.png";
 
@@ -25,7 +26,6 @@ interface LoginResponse {
   };
 }
 
-// ✅ Eye icon wrapper
 const EyeIcon: React.FC<{ show: boolean }> = ({ show }) => {
   const Icon = (show ? FiEyeOff : FiEye) as React.ElementType;
   return <Icon className="eye-icon" size={18} />;
@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await authApi.login(username, password) as LoginResponse;
+      const res = (await authApi.login(username, password)) as LoginResponse;
 
       dispatch(
         loginSuccess({
@@ -55,18 +55,15 @@ const LoginPage: React.FC = () => {
         })
       );
 
-      switch (res.user.role) {
-        case "branch":
-          navigate("/branch-dashboard");
-          break;
-        case "division":
-          navigate("/division-dashboard");
-          break;
-        case "circle":
-          navigate("/circle-dashboard");
-          break;
-        default:
-          navigate("/dashboard");
+      // ✅ Redirect to dashboard based on role
+      if (res.user.role === "branch") {
+        navigate("/branch-dashboard");
+      } else if (res.user.role === "division") {
+        navigate("/division-dashboard");
+      } else if (res.user.role === "circle") {
+        navigate("/circle-dashboard");
+      } else {
+        navigate("/"); // fallback to homepage if role not matched
       }
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
@@ -83,91 +80,70 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-page">
-      {/* ✅ Government Header with India Post Logo */}
-      <div className="govt-header-section">
-        <img 
-          src={logo} 
-          alt="India Post Logo" 
-          className="india-post-logo"
-        />
-        <div className="govt-header-text">
-          <h2>भारतीय डाक</h2>
-          <p>India Post</p>
+      {/* Government Header with India Post Logo */}
+      <header className="govt-header">
+        <div className="header-content">
+          <img src={logo} alt="India Post Logo" className="header-logo" />
+          <div className="header-text">
+            <h2>भारतीय डाक</h2>
+            <p>India Post</p>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* ✅ Stylish Logout button top-right */}
-      {/* <button
-        className="logout-btn"
-        onClick={() => {
-          dispatch(logout());
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button> */}
+      <div className="login-container">
+        <div className="login-box">
+          <div className="login-header">
+            <img src={logo} alt="India Post Logo" className="login-logo" />
+            <h1>BRSR Report</h1>
+            <p>Postal Services Management System</p>
+          </div>
 
-      <div className="login-box">
-        {/* ✅ Logo in the circle above login box */}
-        <img 
-          src={logo} 
-          alt="India Post Logo" 
-          className="login-box-logo"
-        />
-        
-        {/* ✅ Keep header inside login card */}
-        <h1>BRSR Report</h1>
-        <p>Postal Services Management System</p>
+          {error && <div className="error-message">{error}</div>}
 
-        {/* Error */}
-        {error && <div className="error-message">{error}</div>}
-
-        {/* Username */}
-        <input
-          id="username"
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          onKeyPress={handleKeyPress}
-          disabled={loading}
-          className="login-input"
-        />
-
-        {/* Password */}
-        <div className="password-wrapper">
           <input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            id="username"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={loading}
             className="login-input"
           />
+
+          <div className="password-wrapper">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={loading}
+              className="login-input"
+            />
+            <button
+              type="button"
+              className="toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <EyeIcon show={showPassword} />
+            </button>
+          </div>
+
           <button
-            type="button"
-            className="toggle-btn"
-            onClick={() => setShowPassword(!showPassword)}
+            onClick={handleLogin}
+            disabled={loading}
+            className="login-btn"
           >
-            <EyeIcon show={showPassword} />
+            {loading ? "Logging in..." : "Login"}
           </button>
+
+          <p className="login-footer">
+            © {new Date().getFullYear()} BRSR Report - Postal Services
+          </p>
         </div>
-
-        {/* Button */}
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="login-btn"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        {/* Footer */}
-        <p className="login-footer">
-          © {new Date().getFullYear()} BRSR Report - Postal Services
-        </p>
       </div>
     </div>
   );

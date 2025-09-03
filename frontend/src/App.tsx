@@ -1,42 +1,55 @@
 // src/App.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store";
-import Login from "./pages/login";
-import Navbar from "./components/navbar";
+import { logout } from "./slices/authSlice"; // Import logout action
 
-// Import dashboards
+// Pages
+import Login from "./pages/login";
+import Homepage from "./pages/Homepage";
 import BranchDashboard from "./pages/BranchDashboard";
-import BranchESGForm from "./pages/BranchESGForm"; // ✅ NEW Import
+import BranchESGForm from "./pages/BranchESGForm";
 import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
 
 // Protected Route wrapper
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const token = useSelector((state: RootState) => state.auth.token);
-  return token ? children : <Navigate to="/login" replace />;
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+  return token && isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+  // Optional: Clear authentication on app load if you want fresh login every time
+  useEffect(() => {
+    // Uncomment the line below if you want to force logout on app start
+    // dispatch(logout());
+  }, [dispatch]);
+
   return (
     <Router>
-      {/* <Navbar /> */}
       <Routes>
-        {/* Public Route */}
+        {/* Public HomePage (default route) */}
+        <Route path="/Homepage" element={<Homepage />} />
+
+        {/* Public Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Protected Routes */}
+        {/* Private dashboards - only accessible when authenticated */}
         <Route
-          path="/branch-dashboard"
+          path="/branch-dashboard/*"
           element={
             <PrivateRoute>
-              <BranchDashboard/>
+              <BranchDashboard />
             </PrivateRoute>
           }
         />
 
-        {/* ✅ NEW: Branch ESG Form Route */}
         <Route
           path="/branch-esg-form"
           element={
@@ -47,7 +60,7 @@ function App() {
         />
 
         <Route
-          path="/division-dashboard"
+          path="/division-dashboard/*"
           element={
             <PrivateRoute>
               <DivisionDashboard
@@ -68,7 +81,7 @@ function App() {
         />
 
         <Route
-          path="/circle-dashboard"
+          path="/circle-dashboard/*"
           element={
             <PrivateRoute>
               <CircleDashboard
@@ -88,8 +101,8 @@ function App() {
           }
         />
 
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* Catch all -> redirect to homepage */}
+        <Route path="*" element={<Navigate to="/Homepage" replace />} />
       </Routes>
     </Router>
   );

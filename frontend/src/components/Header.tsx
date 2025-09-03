@@ -14,26 +14,26 @@ const Header: React.FC = () => {
 
   return (
     <header className="app-header">
-      {/* Left Section (Text + Logo) */}
-      <div className="govt-header-section">
-        <img src={logo} alt="India Post Logo" className="india-post-logo" />
-        <div className="govt-header-text">
+      {/* Logo and India Post Text */}
+      <div className="header-logo-section">
+        <img src={logo} alt="India Post Logo" className="header-logo" />
+        <div className="header-logo-text">
           <h2>भारतीय डाक</h2>
           <p>India Post</p>
         </div>
       </div>
 
-      {/* Center Section (Main Title + Subtitle) */}
-      <div className="header-center">
-        <h1 className="header-title">BRSR Report for Postal Services</h1>
-        <p className="header-subtitle">Government of India • Department of Posts</p>
+      {/* Center Title */}
+      <div className="header-title-section">
+        <h1>BRSR Report for Postal Services</h1>
+        <p>Government of India • Department of Posts</p>
       </div>
 
-      {/* Right Section (Branch + Logout) */}
-      <div className="header-right">
+      {/* Branch Info and Logout */}
+      <div className="header-actions">
         <div className="branch-info">
           <span className="branch-name">{user?.branch_name}</span>
-          <div className="branch-details-card">
+          <div className="branch-details">
             <p><strong>Manager:</strong> {user?.manager_name}</p>
             <p><strong>Username:</strong> {user?.username}</p>
             <p><strong>Phone:</strong> {user?.phone}</p>
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
             <p><strong>Address:</strong> {user?.address}</p>
           </div>
         </div>
-        <button className="logout-btn" onClick={handleLogout}>
+        <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
       </div>
