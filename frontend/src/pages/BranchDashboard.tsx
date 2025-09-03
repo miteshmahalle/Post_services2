@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { dashboardApi } from "../api";
 import Dashboard from "../components/monthdashboard";
-import Header from "../components/Header";  // ✅ Import Header
-import "../style/branchdashboard.css";      // ✅ Import CSS file
+import Header from "../components/Header";     // ✅ Import Header
+import Sidebar from "../components/sidebar";   // ✅ Import Sidebar
+import "../style/branchdashboard.css";         // ✅ Import CSS file
 
 interface DashboardData {
   branch_id: number;
@@ -34,8 +35,15 @@ const BranchDashboard: React.FC = () => {
 
   return (
     <div className="branch-dashboard">
-      <Header /> {/* ✅ Added Header */}
-      <Dashboard months={data.months} year={data.year} />
+      <Header /> {/* ✅ Top Header */}
+      <div className="dashboard-layout">
+        <Sidebar isOpen={false} onClose={function (): void {
+          throw new Error("Function not implemented.");
+        } } /> {/* ✅ Sidebar on left */}
+        <div className="dashboard-content">
+          <Dashboard months={data.months} year={data.year} />
+        </div>
+      </div>
     </div>
   );
 };

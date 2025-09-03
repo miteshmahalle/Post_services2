@@ -4,11 +4,32 @@
   min-height: 100vh;
 }
 
+/* ✅ Layout below Header */
+.dashboard-layout {
+  display: flex;
+  flex: 1;
+  background: #f9fafb; /* subtle background */
+}
+
+/* ✅ Sidebar styling */
+.dashboard-layout .sidebar {
+  width: 240px;           /* fixed width */
+  background: #1f2937;    /* dark gray */
+  color: #fff;
+  padding: 20px 15px;
+  min-height: calc(100vh - 60px); /* full height minus header */
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Dashboard content */
 .dashboard-content {
   flex: 1;
   padding: 20px;
+  background: #fff;
+  overflow-y: auto;
 }
 
+/* ✅ Loading text */
 .loading-text {
   text-align: center;
   margin-top: 50px;
