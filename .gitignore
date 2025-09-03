@@ -1,25 +1,66 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Ignore all virtual environments
 venv/
-# Ignore backend virtual environment
 Backend/venv/
 
 # Python cache
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
 *.pyd
-
-# Flask instance & environment files
-instance/
-*.env
-.env
-
-# Logs
-*.log
-
-# Databases
-*.sqlite3
-*.db
-
-# OS-specific
-.DS_Store
-Thumbs.db
