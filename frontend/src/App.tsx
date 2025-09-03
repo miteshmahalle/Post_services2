@@ -51,17 +51,6 @@ function App() {
           element={
             <PrivateRoute>
               <DivisionDashboard
-                currentYear={new Date().getFullYear()}
-                username=""
-                role="division"
-                branchesCount={0}
-                stats={{
-                  avg_energy_kwh: 0,
-                  total_energy_bill: 0,
-                  total_training_hours: 0,
-                }}
-                months={[]}
-                branches={[]}
               />
             </PrivateRoute>
           }
