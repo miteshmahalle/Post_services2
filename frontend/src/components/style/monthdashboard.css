@@ -1,127 +1,165 @@
 .dashboard-container {
-  padding: 15px;
-  max-width: 1000px;
-  margin: 0 auto;
+  padding: 0;
 }
 
 .dashboard-title {
   text-align: center;
   color: #2c3e50;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #dc3545;
-  padding-bottom: 8px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #dc2626;
+  position: relative;
+}
+
+.dashboard-title::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: #fbbf24;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  padding: 15px 0;
-  max-width: 900px;
-  margin: 0 auto;
+  padding: 20px 0;
 }
 
 .month-card {
   background: white;
   border-radius: 12px;
-  padding: 18px 12px;
+  padding: 25px 15px;
   text-align: center;
   font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  min-height: 70px;
-  aspect-ratio: 2 / 1;
+  min-height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid transparent;
 }
 
 .month-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Submitted */
 .month-card.submitted {
-  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  border-left: 4px solid #28a745;
+  background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+  color: #22543d;
+  border-color: #48bb78;
 }
 
-/* Not Submitted */
+.month-card.submitted:hover {
+  background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+  box-shadow: 0 8px 25px rgba(72, 187, 120, 0.25);
+}
+
 .month-card.not-submitted {
-  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  border-left: 4px solid #dc3545;
+  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+  color: #742a2a;
+  border-color: #f56565;
 }
 
-/* Status icons */
+.month-card.not-submitted:hover {
+  background: linear-gradient(135deg, #feb2b2 0%, #fc8181 100%);
+  box-shadow: 0 8px 25px rgba(245, 101, 101, 0.25);
+}
+
 .month-card.submitted::after {
   content: "✓";
   position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 1rem;
+  top: 10px;
+  right: 15px;
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #155724;
+  color: #38a169;
 }
 
 .month-card.not-submitted::after {
-  content: "⏳";
+  content: "!";
   position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 1rem;
-  color: #721c24;
+  top: 10px;
+  right: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #e53e3e;
 }
 
-/* Responsive tweaks */
+/* Status badges */
+.month-card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.month-card.submitted::before {
+  background: #38a169;
+}
+
+.month-card.not-submitted::before {
+  background: #e53e3e;
+}
+
+/* Responsive Design */
 @media (max-width: 992px) {
   .dashboard-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    max-width: 700px;
   }
-
+  
   .month-card {
-    padding: 15px 10px;
-    font-size: 0.95rem;
-    min-height: 65px;
+    padding: 20px 12px;
+    font-size: 1rem;
+    min-height: 70px;
   }
 }
 
 @media (max-width: 768px) {
   .dashboard-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    max-width: 500px;
+    gap: 10px;
   }
-
+  
   .month-card {
-    font-size: 0.9rem;
-    padding: 12px 8px;
-    min-height: 60px;
+    padding: 18px 10px;
+    font-size: 0.95rem;
+    min-height: 65px;
+  }
+  
+  .dashboard-title {
+    font-size: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
-    max-width: 300px;
+    gap: 8px;
   }
-
+  
   .month-card {
-    font-size: 0.85rem;
-    min-height: 55px;
-    border-radius: 10px;
+    padding: 15px;
+    font-size: 0.9rem;
+    min-height: 60px;
+  }
+  
+  .dashboard-title {
+    font-size: 1.3rem;
   }
 }
