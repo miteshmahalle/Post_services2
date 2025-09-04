@@ -14,7 +14,9 @@ export interface AuthResponse {
 }
 
 export interface RegisterResponse {
-  message: string;
+  message?: string;
+  success?: boolean;
+  error?: string;
 }
 
 export interface ValidateResponse {
@@ -25,6 +27,7 @@ export interface ProfileResponse {
   message: string;
   profile: User;
 }
+
 
 export interface DashboardResponse {
   branch_id?: number; // changed to number ✅ to match DashboardData
@@ -48,15 +51,11 @@ export const authApi = {
     return res.data;
   },
 
-  register: async (
-    username: string,
-    password: string
-  ): Promise<RegisterResponse> => {
-    const res = await api.post<RegisterResponse>("/auth/register", {
-      username,
-      password,
-    });
-    return res.data;
+  register: async (token: string, Formdata: any): Promise<RegisterResponse> => {
+  const res = await api.post<RegisterResponse>("/auth/register", Formdata, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
   },
 
   validateToken: async (token: string): Promise<ValidateResponse> => {
@@ -82,7 +81,7 @@ export const userApi = {
     token: string,
     profileData: Partial<User>
   ): Promise<ProfileResponse> => {
-    const res = await api.put<ProfileResponse>("/auth/profile", profileData, {
+    const res = await api.put<ProfileResponse>("/auth/update_profile", profileData, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;

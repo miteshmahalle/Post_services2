@@ -32,12 +32,12 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <h4>Profile</h4>
             <ul>
               <li>
-                <button onClick={() => handleNavigation("/branch-dashboard/profile")}>
+                <button onClick={() => handleNavigation("/view/profile")}>
                   View Profile
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavigation("/branch-dashboard/profile/edit")}>
+                <button onClick={() => handleNavigation("/edit/profile")}>
                   Edit Profile
                 </button>
               </li>

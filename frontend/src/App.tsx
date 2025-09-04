@@ -15,6 +15,7 @@ import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
 import ProfileView from "./pages/ProfileView";
 import ProfileEdit from "./pages/ProfileEdit";
+import Add_branch from "./pages/Add_branch";
 
 
 // Protected Route wrapper
@@ -40,7 +41,7 @@ function App() {
       <Routes>
         {/* Public HomePage (default route) */}
         <Route path="/Homepage" element={<Homepage />} />
-
+      
         {/* Public Login */}
         <Route path="/login" element={<Login />} />
 
@@ -81,7 +82,7 @@ function App() {
             </PrivateRoute>
           }
         />
-
+   
         <Route
           path="/view/profile"
           element={
@@ -91,7 +92,16 @@ function App() {
             </PrivateRoute>
           }
         />
-
+        <Route 
+          path="/add-branch" 
+          element={
+            <PrivateRoute>
+             <Add_branch
+             />
+            </PrivateRoute>
+          }
+        />
+          
         <Route
           path="/edit/profile"
           element={

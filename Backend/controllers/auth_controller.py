@@ -282,8 +282,7 @@ def logout():
 # ---------------- GET PROFILE ----------------
 @bp.route('/profile', methods=['GET'])
 @token_required
-def get_profile():
-    current_user = request.current_user
+def get_profile(current_user):   # ✅ must accept current_user
     user_id = current_user['user_id']
     
     conn = get_db_connection()
@@ -310,6 +309,7 @@ def get_profile():
                 ON u.branch_id = b.branch_id
             WHERE u.user_id = %s
         """, (user_id,))
+        
         user_profile = cur.fetchone()
         
         if not user_profile:
@@ -329,14 +329,16 @@ def get_profile():
 
 # ---------------- UPDATE PROFILE ----------------
 # ---------------- UPDATE PROFILE ----------------
-@bp.route('/profile', methods=['PUT'])
+@bp.route('/update_profile', methods=['PUT']) 
 @token_required
-def update_profile():
-    current_user = request.current_user
+def update_profile(current_user):   # ✅ Accept current_user here
     user_id = current_user['user_id']
     branch_id = current_user['branch_id']
-    
+
+    print(f"[DEBUG] Current User: {current_user}")  # ✅ Debugging
+
     data = request.get_json()
+    print(f"[DEBUG] Incoming Data: {data}")  # ✅ Debugging
     
     manager_name = data.get('manager_name')
     email = data.get('email')
@@ -345,38 +347,42 @@ def update_profile():
     pincode = data.get('pincode')
     state = data.get('state')
     
-    # ✅ branch_name removed from required fields
-    if not (manager_name and email):
-        return jsonify({"error": "Manager name and email are required"}), 400
-    
+  
+
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
-    
+
     try:
         # Check if email already exists for another branch
         cur.execute("SELECT branch_id FROM branches WHERE email = %s AND branch_id != %s", (email, branch_id))
         if cur.fetchone():
+            print(f"[ERROR] Email '{email}' already exists for another branch")
             return jsonify({"error": "Email already exists for another branch"}), 400
-        
+
         # Check if phone already exists for another branch
         if phone:
             cur.execute("SELECT branch_id FROM branches WHERE phone = %s AND branch_id != %s", (phone, branch_id))
             if cur.fetchone():
+                print(f"[ERROR] Phone '{phone}' already exists for another branch")
                 return jsonify({"error": "Phone number already exists for another branch"}), 400
-        
-        # ✅ branch_name not included in update
+
+        # ✅ Update query
         cur.execute("""
             UPDATE branches 
             SET manager_name = %s, email = %s, 
                 phone = %s, address = %s, pincode = %s, state = %s
             WHERE branch_id = %s
         """, (manager_name, email, phone, address, pincode, state, branch_id))
-        
+
+        print(f"[DEBUG] Rows affected: {cur.rowcount}")
+
         if cur.rowcount == 0:
-          return jsonify({"message": "No changes were made"}), 200
-        
+            print("[INFO] No changes were made")
+            return jsonify({"message": "No changes were made"}), 200
+
         conn.commit()
-        
+        print("[SUCCESS] Profile updated in DB")
+
         # Fetch updated profile
         cur.execute("""
             SELECT 
@@ -399,16 +405,23 @@ def update_profile():
             WHERE u.user_id = %s
         """, (user_id,))
         updated_profile = cur.fetchone()
-        
+
+        print(f"[DEBUG] Updated Profile: {updated_profile}")
+
         return jsonify({
             "message": "Profile updated successfully",
             "profile": updated_profile
         }), 200
-        
+
     except mysql.connector.Error as e:
         conn.rollback()
-        return jsonify({"error": str(e)}), 500
+        print(f"[DB ERROR] {e}")
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+    except Exception as ex:
+        print(f"[UNEXPECTED ERROR] {ex}")
+        return jsonify({"error": f"Unexpected error: {str(ex)}"}), 500
     finally:
         cur.close()
         conn.close()
+        print("[INFO] DB connection closed")
 
