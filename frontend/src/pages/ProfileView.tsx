@@ -46,10 +46,22 @@ const ProfileView: React.FC = () => {
         <div className="profile-header">
           <button 
             className="back-to-dashboard-btn"
-            onClick={() => navigate("/branch-dashboard")}
+            onClick={() => {
+              if (profileData?.role === "branch") {
+                navigate("/branch-dashboard");
+              } else if (profileData?.role === "division") {
+                navigate("/division-dashboard");
+              } else if (profileData?.role === "circle") {
+                navigate("/circle-dashboard");
+              } else {
+                // fallback if role is unknown
+                navigate("/");
+              }
+            }}
           >
             ← Back to Dashboard
           </button>
+
           <h1>User Profile</h1>
         </div>
 

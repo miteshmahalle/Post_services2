@@ -14,12 +14,12 @@ import {
 import "./style/divisionsidebar.css";
 
 const DivisionSidebar: React.FC = () => {
-  const navItems = [
-    { name: "Profile", icon: <User size={18} />, path: "/division-profile" },
-    { name: "Add Branch", icon: <PlusCircle size={18} />, path: "/add-branch" },
-    { name: "Division Report", icon: <FileText size={18} />, path: "/division-report" },
-    { name: "Branch Report", icon: <Building2 size={18} />, path: "/branch-report" },
-  ];
+ const navItems = [
+  { name: "Profile", icon: <User size={18} />, path: "/view/profile" },
+  { name: "Add Branch", icon: <PlusCircle size={18} />, path: "/add-branch" },
+  { name: "Division Report", icon: <FileText size={18} />, path: "/division-report" },
+  { name: "Branch Report", icon: <Building2 size={18} />, path: "/branch-report" },
+];
 
   const supportItems = [
     { name: "Guidelines", icon: <BookOpen size={18} />, path: "/guidelines" },

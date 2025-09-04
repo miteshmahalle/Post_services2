@@ -21,29 +21,17 @@ const BranchDashboard: React.FC = () => {
   const user = useSelector((state: any) => state.auth.user);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
+      const fetchData = async () => {
         if (!token) return;
-        const result = await dashboardApi.getBranchDashboard(token);
-
-        // ✅ Ensure correct shape of data
-        const transformed: DashboardData = {
-          branch_id: Number(result.branch_id ?? 0),
-          year: Number(result.year ?? new Date().getFullYear()),
-          months: (result.months || []).map((m: string) => ({
-            name: m,
-            submitted: false,
-            value: m,
-          })),
-        };
-
-        setData(transformed);
-      } catch (error) {
-        console.error("Error loading dashboard:", error);
-      }
-    };
-    fetchData();
-  }, [token]);
+        try {
+          const result = await dashboardApi.getBranchDashboard(token); // ✅ Use API helper
+          setData(result as DashboardData);
+        } catch (error) {
+          console.error("Error loading division dashboard:", error);
+        }
+      };
+      fetchData();
+    }, [token]);
 
   if (!data) return <p className="loading-text">Loading...</p>;
 

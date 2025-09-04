@@ -13,6 +13,9 @@ import BranchESGForm from "./pages/BranchESGForm";
 import DivisionESGForm from "./pages/DivisionESGForm";
 import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
+import ProfileView from "./pages/ProfileView";
+import ProfileEdit from "./pages/ProfileEdit";
+
 
 // Protected Route wrapper
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -74,6 +77,26 @@ function App() {
           element={
             <PrivateRoute>
               <DivisionDashboard
+              />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/view/profile"
+          element={
+            <PrivateRoute>
+              <ProfileView
+              />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/edit/profile"
+          element={
+            <PrivateRoute>
+              <ProfileEdit
               />
             </PrivateRoute>
           }
