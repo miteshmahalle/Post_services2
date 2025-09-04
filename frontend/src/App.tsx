@@ -10,6 +10,7 @@ import Login from "./pages/login";
 import Homepage from "./pages/Homepage";
 import BranchDashboard from "./pages/BranchDashboard";
 import BranchESGForm from "./pages/BranchESGForm";
+import DivisionESGForm from "./pages/DivisionESGForm";
 import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
 
@@ -60,21 +61,19 @@ function App() {
         />
 
         <Route
+          path="/division-esg-form"
+          element={
+            <PrivateRoute>
+              <DivisionESGForm />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
           path="/division-dashboard/*"
           element={
             <PrivateRoute>
               <DivisionDashboard
-                currentYear={new Date().getFullYear()}
-                username=""
-                role="division"
-                branchesCount={0}
-                stats={{
-                  avg_energy_kwh: 0,
-                  total_energy_bill: 0,
-                  total_training_hours: 0,
-                }}
-                months={[]}
-                branches={[]}
               />
             </PrivateRoute>
           }

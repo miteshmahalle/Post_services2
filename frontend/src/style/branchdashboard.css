@@ -105,6 +105,83 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  min-height: 500px; /* Ensure minimum height for profile pages */
+}
+
+/* Profile Page Styles within Dashboard */
+.branch-dashboard .profile-container {
+  background: transparent;
+  padding: 0;
+}
+
+.branch-dashboard .profile-content {
+  padding: 0;
+  max-width: 100%;
+}
+
+.branch-dashboard .profile-card {
+  margin: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.branch-dashboard .profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 0;
+}
+
+.branch-dashboard .back-to-dashboard-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.branch-dashboard .back-to-dashboard-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.branch-dashboard .profile-header h1 {
+  color: #1e293b;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Ensure proper spacing for profile content */
+.branch-dashboard .profile-info-grid,
+.branch-dashboard .profile-form {
+  margin: 0;
+}
+
+/* Navigation button styles */
+.side-navigation button {
+  background: none;
+  border: none;
+  color: #4a5568;
+  text-decoration: none;
+  display: block;
+  padding: 8px 0;
+  transition: color 0.3s ease;
+  font-weight: 500;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.side-navigation button:hover {
+  color: #dc2626;
+  background: none;
 }
 
 /* Responsive Design */
@@ -127,9 +204,63 @@
   
   .welcome-section {
     padding: 15px;
+    margin: 15px 0;
   }
   
   .welcome-section h2 {
     font-size: 1.3rem;
+  }
+  
+  .dashboard-right {
+    padding: 15px;
+  }
+  
+  .branch-dashboard .profile-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .branch-dashboard .profile-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .branch-dashboard .profile-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 10px;
+  }
+  
+  .welcome-section {
+    padding: 12px;
+  }
+  
+  .welcome-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .welcome-section p {
+    font-size: 0.85rem;
+  }
+  
+  .dashboard-right {
+    padding: 12px;
+  }
+  
+  .branch-dashboard .profile-card {
+    padding: 15px;
+  }
+  
+  .branch-dashboard .profile-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .branch-dashboard .back-to-dashboard-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
   }
 }
