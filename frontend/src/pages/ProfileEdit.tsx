@@ -4,14 +4,17 @@ import { RootState } from "../store";
 import { updateProfile } from "../slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import "./style/Profile.css";
+import "../style/Profile.css";
 import userLogo from "../images/user-logo.png";
+import { userApi } from "../api"; // ✅ import userApi
 
 const ProfileEdit: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, profileLoading, profileError, token } = useSelector((state: RootState) => state.auth);
-  
+  const { profileLoading, profileError, token } = useSelector(
+    (state: RootState) => state.auth
+  );
+
   const [formData, setFormData] = useState({
     manager_name: "",
     email: "",
@@ -21,22 +24,35 @@ const ProfileEdit: React.FC = () => {
     state: ""
   });
 
+  // ✅ Fetch profile directly from backend
   useEffect(() => {
-    if (user) {
-      setFormData({
-        manager_name: user.manager_name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        address: user.address || "",
-        pincode: (user as any).pincode || "",
-        state: (user as any).state || ""
-      });
-    }
-  }, [user]);
+    const fetchProfile = async () => {
+      if (!token) return;
+      try {
+        const res = await userApi.getProfile(token);
+        const profile = res.profile;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({
+          manager_name: profile.manager_name || "",
+          email: profile.email || "",
+          phone: profile.phone || "",
+          address: profile.address || "",
+          pincode: (profile as any).pincode || "",
+          state: (profile as any).state || ""
+        });
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      }
+    };
+
+    fetchProfile();
+  }, [token]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -44,38 +60,38 @@ const ProfileEdit: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Check if token exists before proceeding
+
     if (!token) {
       console.error("No authentication token found");
       return;
     }
 
     try {
-      // Pass both token and profileData as expected by your action
-      await dispatch(updateProfile({ 
-        token: token, // token is now guaranteed to be string (not null)
-        profileData: formData 
-      }) as any);
-      
-      // Navigate back to profile view after successful update
-      navigate("/profile");
+      // ✅ Always send all fields in formData
+      await dispatch(
+        updateProfile({
+          token,
+          profileData: formData
+        }) as any
+      );
+
+      navigate("/view/profile");
     } catch (error) {
       console.error("Update failed:", error);
     }
   };
 
   const handleCancel = () => {
-    navigate("/profile");
+    navigate("/view/profile");
   };
 
   return (
     <div className="profile-container">
       <Header />
-      
+
       <div className="profile-content">
         <div className="profile-header">
-          <button 
+          <button
             className="back-to-dashboard-btn"
             onClick={() => navigate("/branch-dashboard")}
           >
@@ -91,16 +107,14 @@ const ProfileEdit: React.FC = () => {
           </div>
 
           {profileError && (
-            <div className="error-message">
-              {profileError}
-            </div>
+            <div className="error-message">{profileError}</div>
           )}
 
           <form onSubmit={handleSubmit} className="profile-form">
             <div className="form-sections">
               <div className="form-section">
                 <h3>Personal Information</h3>
-                
+
                 <div className="form-row">
                   <div className="form-group">
                     <label>Manager Name *</label>
@@ -174,7 +188,7 @@ const ProfileEdit: React.FC = () => {
             <div className="form-actions">
               <button
                 type="submit"
-                disabled={profileLoading || !token} // Disable if no token
+                disabled={profileLoading || !token}
                 className="update-btn"
               >
                 {profileLoading ? "Updating..." : "Update Profile"}

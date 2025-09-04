@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import "./style/Profile.css";
+import "../style/Profile.css";
 import userLogo from "../images/user-logo.png";
 
 const ProfileView: React.FC = () => {
@@ -129,7 +129,7 @@ const ProfileView: React.FC = () => {
           <div className="profile-actions">
             <button 
               className="edit-profile-btn"
-              onClick={() => navigate("/edit-profile")}
+              onClick={() => navigate("/edit/profile")}
             >
               Edit Profile
             </button>
