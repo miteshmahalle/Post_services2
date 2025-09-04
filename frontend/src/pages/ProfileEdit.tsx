@@ -15,6 +15,8 @@ const ProfileEdit: React.FC = () => {
     (state: RootState) => state.auth
   );
 
+  const role = useSelector((state: RootState) => state.auth.user?.role);
+
   const [formData, setFormData] = useState({
     manager_name: "",
     email: "",
@@ -93,7 +95,19 @@ const ProfileEdit: React.FC = () => {
         <div className="profile-header">
           <button
             className="back-to-dashboard-btn"
-            onClick={() => navigate("/branch-dashboard")}
+            
+            onClick={() => {
+              if (role === "branch") {
+                navigate("/branch-dashboard");
+              } else if (role === "division") {
+                navigate("/division-dashboard");
+              } else if (role === "circle") {
+                navigate("/circle-dashboard");
+              } else {
+                // fallback if role is unknown
+                navigate("/");
+              }
+            }}
           >
             ← Back to Dashboard
           </button>

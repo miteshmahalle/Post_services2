@@ -50,7 +50,7 @@ const BranchDashboard: React.FC = () => {
             ☰
           </button>
           <ul className="nav-menu">
-            <li><a href="#home">Home</a></li>
+            <li><a href="/Homepage">Home</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#reports">Reports</a></li>
             <li><a href="#contact">Contact</a></li>

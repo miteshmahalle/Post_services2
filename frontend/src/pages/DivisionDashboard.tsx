@@ -74,21 +74,7 @@ const DivisionDashboard: React.FC = () => {
       {/* Fixed Navigation */}
       <nav className="main-navigation fixed-nav">
         <div className="nav-container">
-          <button
-            className="hamburger-menu"
-            aria-label="Toggle navigation"
-            aria-expanded={isNavOpen}
-            onClick={() => setIsNavOpen((v) => !v)}
-          >
-            ☰
-          </button>
-          <ul className={`nav-menu ${isNavOpen ? "open" : ""}`}>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#reports">Reports</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#notifications">Notifications</a></li>
-          </ul>
+          
         </div>
       </nav>
 
