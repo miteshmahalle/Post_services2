@@ -111,7 +111,7 @@ const DivisionScroll: React.FC = () => {
       setCurrentIndex((prevIndex) => 
         prevIndex + 4 >= metricConfig.length ? 0 : prevIndex + 4
       );
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [dashboardData]);

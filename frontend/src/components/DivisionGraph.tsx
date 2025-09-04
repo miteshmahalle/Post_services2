@@ -163,8 +163,10 @@ export default function DivisionGraph() {
             >
               <defs>
                 <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#e54646ff" stopOpacity={0.9} />
-                  <stop offset="100%" stopColor="#f63b3bff" stopOpacity={0.9} />
+                  {/* <stop offset="0%" stopColor="#ecf00ad2" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="#35f30fc0" stopOpacity={0.9} /> */}
+                  <stop offset="0%" stopColor="#0ac2f0f6" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="#0ac2f0f6" stopOpacity={0.9} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
