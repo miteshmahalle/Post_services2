@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./style/navigation.css";
 
 interface NavigationProps {
@@ -7,6 +8,13 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    onClose(); // Close the navigation after clicking
+  };
+
   return (
     <>
       {/* Overlay */}
@@ -23,28 +31,68 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           <div className="nav-section">
             <h4>Profile</h4>
             <ul>
-              <li><a href="#profile">View Profile</a></li>
-              <li><a href="#edit-profile">Edit Profile</a></li>
-              <li><a href="#change-password">Change Password</a></li>
+              <li>
+                <button onClick={() => handleNavigation("/branch-dashboard/profile")}>
+                  View Profile
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/branch-dashboard/profile/edit")}>
+                  Edit Profile
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/change-password")}>
+                  Change Password
+                </button>
+              </li>
             </ul>
           </div>
           
           <div className="nav-section">
             <h4>Reports</h4>
             <ul>
-              <li><a href="#current-reports">Current Reports</a></li>
-              <li><a href="#previous-reports">Previous Reports</a></li>
-              <li><a href="#download-reports">Download Reports</a></li>
+              <li>
+                <button onClick={() => handleNavigation("/reports/current")}>
+                  Current Reports
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/reports/previous")}>
+                  Previous Reports
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/reports/download")}>
+                  Download Reports
+                </button>
+              </li>
             </ul>
           </div>
           
           <div className="nav-section">
             <h4>Important Links</h4>
             <ul>
-              <li><a href="#guidelines">Guidelines</a></li>
-              <li><a href="#deadlines">Deadlines</a></li>
-              <li><a href="#support">Support</a></li>
-              <li><a href="#faq">FAQ</a></li>
+              <li>
+                <button onClick={() => handleNavigation("/guidelines")}>
+                  Guidelines
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/deadlines")}>
+                  Deadlines
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/support")}>
+                  Support
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation("/faq")}>
+                  FAQ
+                </button>
+              </li>
             </ul>
           </div>
         </div>

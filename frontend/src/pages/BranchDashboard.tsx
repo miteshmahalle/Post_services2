@@ -4,7 +4,8 @@ import { dashboardApi } from "../api";
 import Dashboard from "../components/monthdashboard";
 
 import Header from "../components/Header";
-import Navigation from "../components/Navigation"; // New navigation component
+import Navigation from "../components/Navigation";
+import { Outlet } from "react-router-dom"; // ✅ import Outlet
 import "../style/branchdashboard.css";
 
 interface DashboardData {
@@ -24,7 +25,19 @@ const BranchDashboard: React.FC = () => {
       try {
         if (!token) return;
         const result = await dashboardApi.getBranchDashboard(token);
-        setData(result as DashboardData);
+
+        // ✅ Ensure correct shape of data
+        const transformed: DashboardData = {
+          branch_id: Number(result.branch_id ?? 0),
+          year: Number(result.year ?? new Date().getFullYear()),
+          months: (result.months || []).map((m: string) => ({
+            name: m,
+            submitted: false,
+            value: m,
+          })),
+        };
+
+        setData(transformed);
       } catch (error) {
         console.error("Error loading dashboard:", error);
       }
@@ -38,11 +51,11 @@ const BranchDashboard: React.FC = () => {
     <div className="branch-dashboard">
 
       <Header />
-      
+
       {/* Navigation Bar */}
       <nav className="main-navigation">
         <div className="nav-container">
-          <button 
+          <button
             className="hamburger-menu"
             onClick={() => setIsNavOpen(!isNavOpen)}
           >
@@ -68,9 +81,13 @@ const BranchDashboard: React.FC = () => {
         {/* Main Dashboard Content */}
         <div className="dashboard-main">
           <Navigation isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
-          
+
           <div className="dashboard-right">
+            {/* ✅ Dashboard shows by default */}
             <Dashboard months={data.months} year={data.year} />
+
+            {/* ✅ Nested profile routes render here */}
+            <Outlet />
           </div>
         </div>
       </div>
