@@ -157,3 +157,124 @@ def division_dashboard(user):
         "division_stats": division_stats,
         "merged_stats": merged_stats
     })
+
+
+
+# ===============================
+# Division Graph Data (Time-series for a selected ESG column)
+# ===============================
+
+
+@bp.route("/division_graph", methods=["GET"])
+@token_required
+def division_graph(user):
+    if user["role"] != "division":
+        return jsonify({"error": "Unauthorized"}), 403
+
+    division_id = user.get("branch_id")
+    column = request.args.get("column")
+
+    allowed_columns = [
+        "energy_bill",
+        "energy_kwh",
+        "fuel_litres",
+        "paper_reams",
+        "waste_kg",
+        "water_litres",
+        "training_hours",
+        "complaints_count"
+    ]
+    if column not in allowed_columns:
+        return jsonify({"error": "Invalid column name"}), 400
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    query = f"""
+        SELECT reporting_month, ROUND(AVG({column})) AS avg_value
+        FROM (
+            SELECT d.reporting_month, d.{column}
+            FROM division_esg_data d
+            WHERE d.division_id = %s
+
+            UNION ALL
+
+            SELECT e.reporting_month, e.{column}
+            FROM esg_data e
+            INNER JOIN branches b ON e.branch_id = b.branch_id
+            WHERE b.parent_id = %s
+        ) AS combined
+        GROUP BY reporting_month
+        ORDER BY reporting_month
+    """
+
+    cur.execute(query, (division_id, division_id))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "division_id": division_id,
+        "column": column,
+        "data": rows
+    })
+
+
+
+
+# ===============================
+# Division average Data (Time-series for a selected ESG column)
+# ===============================
+
+
+@bp.route("/division_averages", methods=["GET"])
+@token_required
+def division_averages(user):
+    if user["role"] != "division":
+        return jsonify({"error": "Unauthorized"}), 403
+
+    division_id = user.get("branch_id")
+
+    allowed_columns = [
+        "energy_bill",
+        "energy_kwh",
+        "fuel_litres",
+        "paper_reams",
+        "waste_kg",
+        "water_litres",
+        "training_hours",
+        "complaints_count"
+    ]
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    select_parts = ", ".join([f"ROUND(AVG({col})) AS avg_{col}" for col in allowed_columns])
+
+    query = f"""
+        SELECT {select_parts}
+        FROM (
+            SELECT d.*
+            FROM division_esg_data d
+            WHERE d.division_id = %s
+
+            UNION ALL
+
+            SELECT e.*
+            FROM esg_data e
+            INNER JOIN branches b ON e.branch_id = b.branch_id
+            WHERE b.parent_id = %s
+        ) AS combined
+    """
+
+    cur.execute(query, (division_id, division_id))
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "division_id": division_id,
+        "averages": row
+    })

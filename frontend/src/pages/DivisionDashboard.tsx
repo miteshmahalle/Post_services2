@@ -1,22 +1,17 @@
-// src/pages/DivisionDashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../components/Header"; // ✅ Top header
-import DivisionSidebar from "../components/divisionsidebar"; // ✅ Sidebar
-import { dashboardApi } from "../api"; // ✅ Import dashboardApi
-import "../style/divisiondashboard.css"; // ✅ Use new CSS
-import { Navigation } from "lucide-react";
+import Header from "../components/Header";
+import DivisionSidebar from "../components/divisionsidebar";
+import DivisionScroll from "../components/divisionscroll";
+import { dashboardApi } from "../api";
+import "../style/divisiondashboard.css";
 import Dashboard from "../components/monthdashboard";
+import DivisionGraph from "../components/DivisionGraph";
 
 interface Month {
   name: string;
   value: string;
   submitted: boolean;
-}
-
-interface NavigationProps {
-  isOpen: boolean;
-  onClose: () => void;
 }
 
 interface Branch {
@@ -48,17 +43,17 @@ interface DivisionDashboardData {
 const DivisionDashboard: React.FC = () => {
   const [data, setData] = useState<DivisionDashboardData | null>(null);
 
-  // ✅ Get token from Redux
+  // ✅ Get token & user from Redux
   const token = useSelector((state: any) => state.auth.token);
   const user = useSelector((state: any) => state.auth.user);
-  
- const [isNavOpen, setIsNavOpen] = useState(false);
-  
+
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
       try {
-        const result = await dashboardApi.getDivisionDashboard(token); // ✅ Use API helper
+        const result = await dashboardApi.getDivisionDashboard(token);
         setData(result as DivisionDashboardData);
       } catch (error) {
         console.error("Error loading division dashboard:", error);
@@ -71,16 +66,23 @@ const DivisionDashboard: React.FC = () => {
 
   return (
     <div className="division-dashboard">
-      <Header /> {/* ✅ Top header */}
-      <nav className="main-navigation">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+      {/* Fixed Navigation */}
+      <nav className="main-navigation fixed-nav">
         <div className="nav-container">
-          <button 
+          <button
             className="hamburger-menu"
-            onClick={() => setIsNavOpen(!isNavOpen)}
+            aria-label="Toggle navigation"
+            aria-expanded={isNavOpen}
+            onClick={() => setIsNavOpen((v) => !v)}
           >
             ☰
           </button>
-          <ul className="nav-menu">
+          <ul className={`nav-menu ${isNavOpen ? "open" : ""}`}>
             <li><a href="#home">Home</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#reports">Reports</a></li>
@@ -89,24 +91,40 @@ const DivisionDashboard: React.FC = () => {
           </ul>
         </div>
       </nav>
+
       <div className="dashboard-layout">
-        <DivisionSidebar
-        />
-        <div className="dashboard-content">
-        {/* Welcome Message */}
-        <div className="welcome-section">
-          <h2>Welcome, {user?.manager_name}</h2>
-          <p>Last logged in on {new Date().toLocaleDateString()}</p>
+        {/* Fixed Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
         </div>
 
-        {/* Main Dashboard Content */}
-        <div className="dashboard-main">
-        
-          <div className="dashboard-right">
-            <Dashboard months={data.months} year={data.year} />
+        {/* Scrollable Content */}
+        <div className="dashboard-content scrollable-content">
+          {/* Welcome Section */}
+          <div className="welcome-section">
+            <h2>Welcome, {user?.manager_name}</h2>
+            <p>Last logged in on {new Date().toLocaleDateString()}</p>
+          </div>
+
+          {/* Division Scroll Component - Metrics Cards */}
+          <div className="division-scroll-section">
+            <DivisionScroll />
+          </div>
+
+          {/* Division Graph */}
+          <div className="dashboard-graph">
+            <div className="graph-wrapper">
+              <DivisionGraph />
+            </div>
+          </div>
+
+          {/* Month Dashboard */}
+          <div className="dashboard-main">
+            <div className="dashboard-right">
+              <Dashboard months={data.months} year={data.year} />
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

@@ -129,3 +129,21 @@ export const dashboardApi = {
   },
   
 };
+
+export const divisionDashboard = {
+
+  // ✅ Get Division Graph (dynamic column)
+  getGraph: async (token: string, column: string) => {
+    const res = await api.get(`division_esg/division_graph?column=${column}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // { column, data: [...], division_id }
+  },
+
+  getAverage: async (token: string, column: string) => {
+    const res = await api.get(`division_esg/division_averages`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // { column, data: [...], division_id }
+  },
+}
