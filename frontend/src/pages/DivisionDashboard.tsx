@@ -77,7 +77,7 @@ const DivisionDashboard: React.FC = () => {
       {/* Fixed Navigation */}
       <nav className="blue_header">
         <div className="nav-text">
-        <h2> Division Dashboard </h2> 
+        <h2> Division Dashboard for {user?.manager_name}</h2> 
         </div>
       </nav>
 

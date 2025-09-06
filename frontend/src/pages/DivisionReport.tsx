@@ -16,8 +16,10 @@ import {
   Trash2, 
   Droplets,
   BarChart3,
-  Building
+  Building,
+  Download
 } from "lucide-react";
+import { downloadAveragesPdf } from "../utils/pdfReport";
 
 interface YearlyAverage {
   avg_complaints_count: string;
@@ -45,7 +47,7 @@ interface MetricConfig {
   format: (value: number) => string;
 }
 
-const DivisionDashboard: React.FC = () => {
+const DivisionReport: React.FC = () => {
   const [divisionData, setDivisionData] = useState<YearlyAverage[] | null>(null);
   const [branchData, setBranchData] = useState<YearlyAverage[] | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -181,7 +183,7 @@ const DivisionDashboard: React.FC = () => {
       {/* Blue Header */}
       <nav className="blue_header">
         <div className="nav-text">
-          <h2>Sustainability Reports</h2>
+          <h2>Division Reports for {user?.manager_name}</h2>
         </div>
       </nav>
 
@@ -194,28 +196,46 @@ const DivisionDashboard: React.FC = () => {
         {/* Content */}
         <div className="dashboard-content scrollable-content">
           <div className="welcome-section">
-            <h2>Welcome, {user?.manager_name}</h2>
-            <p>
-              Sustainability performance data for{" "}
-              <b>{user?.division_name}</b>
-            </p>
-            
-            {/* Year selector */}
-            {availableYears.length > 1 && (
-              <div className="year-selector">
-                <label htmlFor="year-select">Select Year: </label>
-                <select 
-                  id="year-select"
-                  value={selectedYear || availableYears[0]}
-                  onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                >
-                  {availableYears.map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
+  <h2>Welcome, {user?.manager_name}</h2>
+  
+
+  {/* Year selector */}
+  {availableYears.length > 1 && (
+    <div className="year-selector">
+      <label htmlFor="year-select">Select Year: </label>
+      <select 
+        id="year-select"
+        value={selectedYear || availableYears[0]}
+        onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+      >
+        {availableYears.map(year => (
+          <option key={year} value={year}>{year}</option>
+        ))}
+      </select>
+    </div>
+  )}
+
+  {/* 🚀 PDF Download Buttons */}
+  <div className="download-buttons">
+    {divisionYearData && (
+      <button
+        className="download-btn"
+        onClick={() => downloadAveragesPdf(divisionYearData, "Division Report")}
+      >
+        <Download size={16} /> Download Division Report
+      </button>
+    )}
+    {branchYearData && (
+      <button
+        className="download-btn"
+        onClick={() => downloadAveragesPdf(branchYearData, "Branch Report")}
+      >
+        <Download size={16} /> Download Branch Report
+      </button>
+    )}
+  </div>
+</div>
+
 
           <div className="reports-container">
             {/* Division Report Section */}
@@ -294,4 +314,4 @@ const DivisionDashboard: React.FC = () => {
   );
 };
 
-export default DivisionDashboard;
+export default DivisionReport;

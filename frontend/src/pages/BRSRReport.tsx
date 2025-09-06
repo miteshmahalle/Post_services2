@@ -167,7 +167,7 @@ const BRSRReport: React.FC = () => {
       {/* Blue Header */}
       <nav className="blue_header">
         <div className="nav-text">
-          <h2>BRSR Report</h2>
+          <h2>BRSR Report for {user?.manager_name}</h2>
         </div>
       </nav>
 
@@ -183,7 +183,6 @@ const BRSRReport: React.FC = () => {
             <div className="report-header">
               <div>
                 <h2>Welcome, {user?.manager_name}</h2>
-                <p>Business Responsibility and Sustainability Report for {user?.division_name}</p>
               </div>
             </div>
             

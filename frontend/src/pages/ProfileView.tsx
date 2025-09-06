@@ -47,7 +47,7 @@ const ProfileView: React.FC = () => {
 
       <nav className="blue_header">
         <div className="nav-text">
-        <h2> Profile </h2> 
+        <h2> Profile {user?.manager_name} </h2> 
         </div>
       </nav>
 
