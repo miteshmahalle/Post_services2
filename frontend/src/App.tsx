@@ -16,7 +16,8 @@ import CircleDashboard from "./pages/CircleDashboard";
 import ProfileView from "./pages/ProfileView";
 import ProfileEdit from "./pages/ProfileEdit";
 import Add_branch from "./pages/Add_branch";
-
+import DivisionReport from "./pages/DivisionReport";
+import BranchReport from "./pages/BRSRReport";
 
 // Protected Route wrapper
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -78,6 +79,26 @@ function App() {
           element={
             <PrivateRoute>
               <DivisionDashboard
+              />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/division-report"
+          element={
+            <PrivateRoute>
+              <DivisionReport
+              />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/brsr-report"
+          element={
+            <PrivateRoute>
+              <BranchReport
               />
             </PrivateRoute>
           }

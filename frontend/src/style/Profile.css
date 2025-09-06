@@ -1,22 +1,63 @@
-.profile-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+/* Make header fixed at the top */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
-.profile-content {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  padding-top: 20px;
+/* Blue header (sub-header) below main header */
+.blue_header {
+  position: fixed;
+  top: 96px; /* adjust according to Header height */
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(90deg, #2c3e50 0%);
+  color: white;
+  padding: 10px 20px;
+  z-index: 999;
+  margin-bottom: 10px;
 }
+
+/* Sidebar fixed on the left */
+.fixed-sidebar {
+  position: fixed;
+  top: 100px; /* Header (70px) + blue_header (50px) */
+  left: 0;
+  bottom: 0;
+  width: 250px; /* adjust as per your sidebar width */
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+  z-index: 998;
+}
+
+/* Push content to the right and below headers */
+.profile-content {
+  margin-left: 400px; /* same as sidebar width */
+  margin-top: 130px;  /* header + blue_header height */
+  max-width: 900px;
+  padding: 20px;
+}
+
+.edit-profile-content {
+  margin-left: 250px; /* same as sidebar width */
+  margin-top: 130px;  /* header + blue_header height */
+  max-width: 900px;
+  padding: 20px;
+}
+
 
 .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
+  top: 90px;
 }
 
 .profile-header h1 {
@@ -27,8 +68,8 @@
 }
 
 .back-to-dashboard-btn {
-  background: #dc2626;
   color: white;
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
@@ -38,7 +79,8 @@
 }
 
 .back-to-dashboard-btn:hover {
-  background: #b91c1c;
+  color: white;
+  background: linear-gradient(90deg, #e94f4f 0%, #e94f4f 100%);
   transform: translateY(-1px);
 }
 
@@ -149,23 +191,23 @@
 }
 
 .edit-profile-btn {
-  background: #dc2626;
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
   color: white;
 }
 
 .edit-profile-btn:hover {
-  background: #b91c1c;
+  background: linear-gradient(90deg, #f85656 0%, #f85656 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
 }
 
 .change-password-btn {
-  background: #3b82f6;
+  background: linear-gradient(90deg, #4d78a3 0%);
   color: white;
 }
 
 .change-password-btn:hover {
-  background: #2563eb;
+  background: linear-gradient(90deg, #2c3e50 0%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
 }
@@ -253,12 +295,12 @@
 }
 
 .update-btn {
-  background: #059669;
+  background: linear-gradient(90deg, #2c3e50 0%);
   color: white;
 }
 
 .update-btn:hover:not(:disabled) {
-  background: #047857;
+  background: linear-gradient(90deg, #3a5979 0%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
 }

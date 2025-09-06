@@ -145,4 +145,22 @@ export const divisionDashboard = {
     });
     return res.data; // { column, data: [...], division_id }
   },
+  getDivisionReport: async (token: string) => {
+    const res = await api.get(`division_esg/division_yearly_averages`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // { column, data: [...], division_id }
+  },
+  getDivisionBRSRReport: async (token: string) => {
+    const res = await api.get(`division_esg/division_BRSR_report`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // { column, data: [...], division_id }
+  },
+  getBranchReport: async (token: string) => {
+    const res = await api.get(`division_esg/division_branch_yearly_averages`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // { column, data: [...], division_id }
+  },
 }

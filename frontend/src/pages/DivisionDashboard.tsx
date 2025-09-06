@@ -62,7 +62,10 @@ const DivisionDashboard: React.FC = () => {
     fetchData();
   }, [token]);
 
-  if (!data) return <p className="loading-text">Loading Division Dashboard...</p>;
+  if (!data) return <div className="loader-container">
+      <div className="loader"></div>
+      <p className="loading-text">Loading Division Report...</p>
+    </div>;
 
   return (
     <div className="division-dashboard">
@@ -72,9 +75,9 @@ const DivisionDashboard: React.FC = () => {
       </div>
 
       {/* Fixed Navigation */}
-      <nav className="main-navigation fixed-nav">
-        <div className="nav-container">
-          
+      <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Division Dashboard </h2> 
         </div>
       </nav>
 

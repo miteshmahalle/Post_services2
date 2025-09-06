@@ -89,27 +89,26 @@ const ProfileEdit: React.FC = () => {
 
   return (
     <div className="profile-container">
-      <Header />
+      <div className="fixed-header">
+        <Header />
+      </div>
 
-      <div className="profile-content">
+      <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Edit Profile </h2> 
+        </div>
+      </nav>
+
+      <div className="edit-profile-content">
         <div className="profile-header">
           <button
             className="back-to-dashboard-btn"
             
             onClick={() => {
-              if (role === "branch") {
-                navigate("/branch-dashboard");
-              } else if (role === "division") {
-                navigate("/division-dashboard");
-              } else if (role === "circle") {
-                navigate("/circle-dashboard");
-              } else {
-                // fallback if role is unknown
-                navigate("/");
-              }
+                navigate("/view/profile");
             }}
           >
-            ← Back to Dashboard
+            ← Back to Profile
           </button>
           <h1>Edit Profile</h1>
         </div>

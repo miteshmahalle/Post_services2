@@ -278,3 +278,173 @@ def division_averages(user):
         "division_id": division_id,
         "averages": row
     })
+
+
+
+
+# ===============================
+# Division all branches yearly avgerages
+# ===============================
+
+@bp.route("/division_branch_yearly_averages", methods=["GET"])
+@token_required
+def division_branch_yearly_averages(user):
+    if user["role"] != "division":
+        return jsonify({"error": "Unauthorized"}), 403
+
+    division_id = user.get("branch_id")
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT 
+            YEAR(e.reporting_month) AS year,
+            ROUND(SUM(e.energy_bill)      / COUNT(DISTINCT e.branch_id)) AS avg_energy_bill,
+            ROUND(SUM(e.energy_kwh)       / COUNT(DISTINCT e.branch_id)) AS avg_energy_kwh,
+            ROUND(SUM(e.fuel_litres)      / COUNT(DISTINCT e.branch_id)) AS avg_fuel_litres,
+            ROUND(SUM(e.paper_reams)      / COUNT(DISTINCT e.branch_id)) AS avg_paper_reams,
+            ROUND(SUM(e.waste_kg)         / COUNT(DISTINCT e.branch_id)) AS avg_waste_kg,
+            ROUND(SUM(e.water_litres)     / COUNT(DISTINCT e.branch_id)) AS avg_water_litres,
+            ROUND(SUM(e.training_hours)   / COUNT(DISTINCT e.branch_id)) AS avg_training_hours,
+            ROUND(SUM(e.complaints_count) / COUNT(DISTINCT e.branch_id)) AS avg_complaints_count
+        FROM esg_data e
+        INNER JOIN branches b 
+            ON e.branch_id = b.branch_id
+        WHERE b.parent_id = %s
+        GROUP BY YEAR(e.reporting_month)
+        ORDER BY year DESC
+    """
+
+    cur.execute(query, (division_id,))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "division_id": division_id,
+        "averages": rows
+    })
+
+
+
+# ===============================
+# Only Division yearly avgerages
+# ===============================
+@bp.route("/division_yearly_averages", methods=["GET"])
+@token_required
+def division_yearly_averages(user):
+    if user["role"] != "division":
+        return jsonify({"error": "Unauthorized"}), 403
+
+    division_id = user.get("branch_id")
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT 
+            YEAR(d.reporting_month) AS year,
+            ROUND(SUM(d.energy_bill))       AS avg_energy_bill,
+            ROUND(SUM(d.energy_kwh))        AS avg_energy_kwh,
+            ROUND(SUM(d.fuel_litres))       AS avg_fuel_litres,
+            ROUND(SUM(d.paper_reams))       AS avg_paper_reams,
+            ROUND(SUM(d.waste_kg))          AS avg_waste_kg,
+            ROUND(SUM(d.water_litres))      AS avg_water_litres,
+            ROUND(SUM(d.training_hours))    AS avg_training_hours,
+            ROUND(SUM(d.complaints_count))  AS avg_complaints_count
+        FROM division_esg_data d
+        WHERE d.division_id = %s
+        GROUP BY YEAR(d.reporting_month)
+        ORDER BY year DESC
+    """
+
+    cur.execute(query, (division_id,))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "division_id": division_id,
+        "averages": rows
+    })
+
+
+# ===============================
+# BRSR report combined yearly avgerages of division and its branches
+# ===============================
+
+@bp.route("/division_BRSR_report", methods=["GET"])
+@token_required
+def division_combined_yearly_averages(user):
+    if user["role"] != "division":
+        return jsonify({"error": "Unauthorized"}), 403
+
+    division_id = user.get("branch_id")
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    query = """
+        WITH yearly_data AS (
+            -- Branch averages
+            SELECT 
+                YEAR(e.reporting_month) AS year,
+                ROUND(SUM(e.energy_bill)      / COUNT(DISTINCT e.branch_id)) AS avg_energy_bill,
+                ROUND(SUM(e.energy_kwh)       / COUNT(DISTINCT e.branch_id)) AS avg_energy_kwh,
+                ROUND(SUM(e.fuel_litres)      / COUNT(DISTINCT e.branch_id)) AS avg_fuel_litres,
+                ROUND(SUM(e.paper_reams)      / COUNT(DISTINCT e.branch_id)) AS avg_paper_reams,
+                ROUND(SUM(e.waste_kg)         / COUNT(DISTINCT e.branch_id)) AS avg_waste_kg,
+                ROUND(SUM(e.water_litres)     / COUNT(DISTINCT e.branch_id)) AS avg_water_litres,
+                ROUND(SUM(e.training_hours)   / COUNT(DISTINCT e.branch_id)) AS avg_training_hours,
+                ROUND(SUM(e.complaints_count) / COUNT(DISTINCT e.branch_id)) AS avg_complaints_count
+            FROM esg_data e
+            INNER JOIN branches b 
+                ON e.branch_id = b.branch_id
+            WHERE b.parent_id = %s
+            GROUP BY YEAR(e.reporting_month)
+
+            UNION ALL
+
+            -- Division totals
+            SELECT 
+                YEAR(d.reporting_month) AS year,
+                ROUND(SUM(d.energy_bill))       AS avg_energy_bill,
+                ROUND(SUM(d.energy_kwh))        AS avg_energy_kwh,
+                ROUND(SUM(d.fuel_litres))       AS avg_fuel_litres,
+                ROUND(SUM(d.paper_reams))       AS avg_paper_reams,
+                ROUND(SUM(d.waste_kg))          AS avg_waste_kg,
+                ROUND(SUM(d.water_litres))      AS avg_water_litres,
+                ROUND(SUM(d.training_hours))    AS avg_training_hours,
+                ROUND(SUM(d.complaints_count))  AS avg_complaints_count
+            FROM division_esg_data d
+            WHERE d.division_id = %s
+            GROUP BY YEAR(d.reporting_month)
+        )
+        SELECT 
+            year,
+            ROUND(AVG(avg_energy_bill))      AS avg_energy_bill,
+            ROUND(AVG(avg_energy_kwh))       AS avg_energy_kwh,
+            ROUND(AVG(avg_fuel_litres))      AS avg_fuel_litres,
+            ROUND(AVG(avg_paper_reams))      AS avg_paper_reams,
+            ROUND(AVG(avg_waste_kg))         AS avg_waste_kg,
+            ROUND(AVG(avg_water_litres))     AS avg_water_litres,
+            ROUND(AVG(avg_training_hours))   AS avg_training_hours,
+            ROUND(AVG(avg_complaints_count)) AS avg_complaints_count
+        FROM yearly_data
+        GROUP BY year
+        ORDER BY year DESC
+    """
+
+    cur.execute(query, (division_id, division_id))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "division_id": division_id,
+        "averages": rows
+    })

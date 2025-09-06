@@ -38,19 +38,19 @@ const DivisionScroll: React.FC = () => {
   // Configuration for each metric with icons and formatting
   const metricConfig: MetricConfig[] = [
     {
-      key: 'avg_complaints_count',
-      title: 'Complaints',
-      icon: AlertTriangle,
-      color: 'red',
-      unit: '',
-      format: (value) => value
-    },
-    {
       key: 'avg_energy_bill',
       title: 'Energy Bill',
       icon: TrendingUp,
       color: 'green',
-      unit: '$',
+      unit: '₹',
+      format: (value) => new Intl.NumberFormat().format(parseInt(value))
+    },
+    {
+      key: 'avg_water_litres',
+      title: 'Water Usage',
+      icon: Droplets,
+      color: 'cyan',
+      unit: 'L',
       format: (value) => new Intl.NumberFormat().format(parseInt(value))
     },
     {
@@ -94,13 +94,13 @@ const DivisionScroll: React.FC = () => {
       format: (value) => new Intl.NumberFormat().format(parseInt(value))
     },
     {
-      key: 'avg_water_litres',
-      title: 'Water Usage',
-      icon: Droplets,
-      color: 'cyan',
-      unit: 'L',
-      format: (value) => new Intl.NumberFormat().format(parseInt(value))
-    }
+      key: 'avg_complaints_count',
+      title: 'Complaints',
+      icon: AlertTriangle,
+      color: 'red',
+      unit: '',
+      format: (value) => value
+    },
   ];
 
   // Auto-scroll effect
@@ -195,7 +195,7 @@ const DivisionScroll: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1 className="dashboard-title">Division Dashboard</h1>
+        <h1 className="dashboard-title">Average Monthly Consumptions</h1>
       </div>
 
       {/* Cards Container */}

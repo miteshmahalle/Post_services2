@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import "../style/Profile.css";
 import userLogo from "../images/user-logo.png";
+import DivisionSidebar from "../components/divisionsidebar";
 
 const ProfileView: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,11 +41,22 @@ const ProfileView: React.FC = () => {
 
   return (
     <div className="profile-container">
-      <Header />
-      
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+      <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Profile </h2> 
+        </div>
+      </nav>
+
+      <div className="fixed-sidebar">
+          <DivisionSidebar />
+        </div>
       <div className="profile-content">
         <div className="profile-header">
-          <button 
+          {/* <button 
             className="back-to-dashboard-btn"
             onClick={() => {
               if (profileData?.role === "branch") {
@@ -60,9 +72,9 @@ const ProfileView: React.FC = () => {
             }}
           >
             ← Back to Dashboard
-          </button>
+          </button> */}
 
-          <h1>User Profile</h1>
+          <h1>Manager Profile</h1>
         </div>
 
         <div className="profile-card">
