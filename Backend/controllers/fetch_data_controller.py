@@ -162,7 +162,7 @@ def generate_report(current_user):
         full_report_data = {**division_info, **report_data}
         
         # 2. Generate PDF (using year instead of reporting_month)
-        pdf_path = generate_pdf_report(full_report_data, year)
+        # pdf_path = generate_pdf_report(full_report_data, year)
         
         # 3. Store report metadata in database (without reporting_month)
         cur.execute("""
@@ -183,14 +183,14 @@ def generate_report(current_user):
             # You might need to calculate branches_count differently
             1,  # Placeholder - adjust as needed
             current_user['user_id'],
-            pdf_path
+            # pdf_path
         ))
         
         conn.commit()
         
         return jsonify({
             "message": "Report generated successfully",
-            "pdf_url": f"/api/reports/{os.path.basename(pdf_path)}",
+            # "pdf_url": f"/api/reports/{os.path.basename(pdf_path)}",
             "report_id": cur.lastrowid
         })
         
@@ -201,55 +201,61 @@ def generate_report(current_user):
         cur.close()
         conn.close()
 
-def generate_pdf_report(data, year):
-    # Create PDF using reportlab or weasyprint
-    # Use year instead of reporting_month in the filename
-    filename = f"BRSR_Report_{data['division_id']}_{year}.pdf"
-    save_path = os.path.join('reports', filename)
+# def generate_pdf_report(data, year):
+#     # Create PDF using reportlab or weasyprint
+#     # Use year instead of reporting_month in the filename
+#     filename = f"BRSR_Report_{data['division_id']}_{year}.pdf"
+#     save_path = os.path.join('reports', filename)
     
-    # Example with reportlab
-    from reportlab.lib.pagesizes import letter
-    from reportlab.pdfgen import canvas
+#     # Example with reportlab
+#     from reportlab.lib.pagesizes import letter
+#     from reportlab.pdfgen import canvas
     
-    c = canvas.Canvas(save_path, pagesize=letter)
-    c.drawString(100, 750, f"BRSR Report - {data['division_name']}")
-    c.drawString(100, 730, f"Reporting Year: {year}")  # Changed from Period to Year
-    c.drawString(100, 710, f"Manager: {data['manager_name']}")
+#     c = canvas.Canvas(save_path, pagesize=letter)
+#     c.drawString(100, 750, f"BRSR Report - {data['division_name']}")
+#     c.drawString(100, 730, f"Reporting Year: {year}")  # Changed from Period to Year
+#     c.drawString(100, 710, f"Manager: {data['manager_name']}")
     
-    # Add all your data fields...
-    y_position = 690
-    c.drawString(100, y_position, f"Average Energy Consumption (kWh): {data.get('avg_energy_kwh', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Energy Bill: {data.get('avg_energy_bill', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Fuel Consumption (Liters): {data.get('avg_fuel_litres', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Paper Consumption (Reams): {data.get('avg_paper_reams', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Waste Generated (kg): {data.get('avg_waste_kg', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Water Consumption (Liters): {data.get('avg_water_litres', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Training Hours: {data.get('avg_training_hours', 'N/A')}")
-    y_position -= 20
-    c.drawString(100, y_position, f"Average Complaints Count: {data.get('avg_complaints_count', 'N/A')}")
+#     # Add all your data fields...
+#     y_position = 690
+#     c.drawString(100, y_position, f"Average Energy Consumption (kWh): {data.get('avg_energy_kwh', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Energy Bill: {data.get('avg_energy_bill', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Fuel Consumption (Liters): {data.get('avg_fuel_litres', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Paper Consumption (Reams): {data.get('avg_paper_reams', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Waste Generated (kg): {data.get('avg_waste_kg', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Water Consumption (Liters): {data.get('avg_water_litres', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Training Hours: {data.get('avg_training_hours', 'N/A')}")
+#     y_position -= 20
+#     c.drawString(100, y_position, f"Average Complaints Count: {data.get('avg_complaints_count', 'N/A')}")
     
-    c.save()
+#     c.save()
     
-    return save_path
+#     return save_path
 
-@bp.route('/reports/<filename>', methods=['GET'])
-@token_required
-def download_report(current_user, filename):
-    if current_user['role'] not in ['division', 'circle']:
-        return jsonify({"error": "Unauthorized"}), 403
+# @bp.route('/reports/<filename>', methods=['GET'])
+# def download_report(filename):
+#     token = request.args.get('token')
     
-    file_path = os.path.join('reports', filename)
+#     if not token:
+#         return jsonify({"error": "Token required"}), 401
+        
+#     # Verify token (you'll need to implement this)
+#     current_user = verify_token(token)
+#     if not current_user or current_user['role'] not in ['division', 'circle']:
+#         return jsonify({"error": "Unauthorized"}), 403
     
-    if not os.path.exists(file_path):
-        return jsonify({"error": "Report not found"}), 404
+#     file_path = os.path.join('reports', filename)
     
-    return send_file(file_path, as_attachment=True)
+#     if not os.path.exists(file_path):
+#         return jsonify({"error": "Report not found"}), 404
+    
+#     return send_file(file_path, as_attachment=True)
 
 @bp.route('/submitted-reports', methods=['GET'])
 @token_required

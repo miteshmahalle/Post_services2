@@ -6,6 +6,9 @@
   align-items: flex-start;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding: 20px;
+  margin-left: 250px; /* Account for fixed sidebar */
+  margin-top: 80px; /* Account for fixed header */
+  width: calc(100% - 250px); /* Adjust width for sidebar */
 }
 
 .registered-list-card {
@@ -13,88 +16,41 @@
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   padding: 30px;
   position: relative;
   margin: 20px 0;
+  max-height: calc(100vh - 140px); /* Adjust height for headers */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent overall card scrolling */
 }
 
 .registered-list-header {
   text-align: center;
   margin-bottom: 30px;
   position: relative;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
-.back-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: #3498db;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.back-button:hover {
-  background: #2980b9;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.logo-container {
+/* Scrollable content area */
+.registered-list-content {
+  flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  gap: 10px;
-}
-
-.logo {
-  height: 50px;
-  width: auto;
-}
-
-.registered-list-header h2 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.loading {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: #666;
-  font-weight: 500;
-}
-
-.error-message {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 12px 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 500;
-  border: 1px solid #f5c6cb;
+  flex-direction: column;
+  overflow: hidden; /* Contain the scrolling table */
 }
 
 .table-container {
   overflow-x: auto;
-  margin-bottom: 30px;
-  max-height: 500px;
-  overflow-y: auto;
+  overflow-y: auto; /* Enable vertical scrolling */
+  flex: 1; /* Take remaining space */
+  max-height: 400px; /* Limit height for scrolling */
   border-radius: 8px;
   border: 1px solid #e0e0e0;
 }
 
+/* Fixed table header */
 .branches-table {
   width: 100%;
   border-collapse: collapse;
@@ -121,61 +77,17 @@
   font-size: 14px;
 }
 
-.branches-table tr:hover {
-  background-color: #f8f9fa;
-}
-
-.branches-table tr:last-child td {
-  border-bottom: none;
-}
-
-.branches-table tr:nth-child(even) {
-  background-color: #fafafa;
-}
-
-.branches-table tr:nth-child(even):hover {
-  background-color: #f0f0f0;
-}
-
-.no-data {
-  text-align: center;
-  color: #666;
-  font-style: italic;
-  padding: 30px;
-  font-size: 16px;
-}
-
+/* Action buttons fixed at bottom */
 .action-buttons {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  flex-shrink: 0; /* Prevent buttons from scrolling */
+  padding-top: 20px;
+  border-top: 1px solid #eee;
 }
 
-.add-button {
-  background: #27ae60;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.add-button:hover {
-  background: #219653;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.add-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Scrollbar styling for table container */
+/* Scrollbar styling */
 .table-container::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -198,12 +110,16 @@
 /* Responsive design */
 @media (max-width: 768px) {
   .registered-list-container {
+    margin-left: 0;
+    width: 100%;
     padding: 10px;
+    margin-top: 120px; /* More space for mobile header */
   }
   
   .registered-list-card {
     padding: 20px;
     margin: 10px 0;
+    max-height: calc(100vh - 160px);
   }
   
   .back-button {
@@ -213,59 +129,7 @@
     text-align: center;
   }
   
-  .logo-container {
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
-  .registered-list-header h2 {
-    font-size: 20px;
-  }
-  
-  .branches-table {
-    font-size: 12px;
-  }
-  
-  .branches-table th,
-  .branches-table td {
-    padding: 8px 6px;
-  }
-  
-  .branches-table th {
-    font-size: 12px;
-  }
-  
   .table-container {
-    max-height: 400px;
-  }
-  
-  .add-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .registered-list-card {
-    padding: 15px;
-  }
-  
-  .branches-table th,
-  .branches-table td {
-    padding: 6px 4px;
-    font-size: 11px;
-  }
-  
-  .branches-table th {
-    font-size: 11px;
-    padding: 8px 4px;
-  }
-  
-  .logo {
-    height: 40px;
-  }
-  
-  .registered-list-header h2 {
-    font-size: 18px;
+    max-height: 300px;
   }
 }

@@ -3,9 +3,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { branchesApi, Branch } from "../api"; // Import the API and interface
+import { branchApi, BranchesResponse, Branch } from "../api"; // Import the correct types
 import "../style/registered_list.css";
 import logo from "../images/India-Post-Color.png";
+import DivisionSidebar from "../components/divisionsidebar";
+import Header from "../components/Header";
 
 const RegisteredList: React.FC = () => {
   const navigate = useNavigate();
@@ -23,12 +25,13 @@ const RegisteredList: React.FC = () => {
       setLoading(true);
       setError("");
       
-    // Add this null check
-    if (!token) {
-      throw new Error("Authentication token not available");
-    }
-      // Use the API method from api.ts
-      const response = await branchesApi.getBranchesList(token);
+      // Add this null check
+      if (!token) {
+        throw new Error("Authentication token not available");
+      }
+      
+      // Use the correct type: BranchesResponse (not Branch)
+      const response: BranchesResponse = await branchApi.getBranchesList(token);
       
       if (response.error) {
         throw new Error(response.error);
@@ -60,7 +63,7 @@ const RegisteredList: React.FC = () => {
     else if (user?.role === "circle") navigate("/add-branch");
   };
 
-  const  handleBackButtonClick = () => {
+  const handleBackButtonClick = () => {
     if (user?.role === "division") navigate("/division-dashboard");
     else if (user?.role === "circle") navigate("/circle-dashboard");
   };
@@ -72,17 +75,38 @@ const RegisteredList: React.FC = () => {
       </div>
     );
   }
-
   return (
     <div className="registered-list-container">
+
+
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+    
+      <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Division Dashboard for {user?.manager_name}</h2> 
+        </div>
+      </nav> 
+
+      <div className="dashboard-layout">
+        {/* Fixed Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
+        </div>
+
+
       <div className="registered-list-card">
         <div className="registered-list-header">
+          <div className="action-buttons">
           <button 
-            className="back-button"
-            onClick={handleBackButtonClick}
+            className="add-button"
+            onClick={handleAddButtonClick}
           >
-            ← Back to Dashboard
+            {getButtonText()}
           </button>
+        </div>
           <div className="logo-container">
             <img src={logo} alt="India Post Logo" className="logo" />
           </div>
@@ -128,15 +152,8 @@ const RegisteredList: React.FC = () => {
           </table>
         </div>
 
-        <div className="action-buttons">
-          <button 
-            className="add-button"
-            onClick={handleAddButtonClick}
-          >
-            {getButtonText()}
-          </button>
-        </div>
       </div>
+    </div>
     </div>
   );
 };

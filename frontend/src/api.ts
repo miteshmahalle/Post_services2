@@ -194,3 +194,30 @@ export const divisionDashboard = {
     return res.data; // { column, data: [...], division_id }
   },
 }
+// In your api.ts file, add this to the report_tableApi object
+export const report_tableApi = {
+  // ... other endpoints
+  getSubmittedReports: (token: string): Promise<any> => {
+    return fetch("/api/fetch_data/submitted-reports", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(handleResponse);
+  },
+};
+
+
+function handleResponse(value: Response) {
+  throw new Error("Function not implemented.");
+}
+
+export const branchApi = {
+  getBranchesList: async (token: string): Promise<BranchesResponse> => {
+    const res = await api.get<BranchesResponse>("/fetch_data/branches/list", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
+};
