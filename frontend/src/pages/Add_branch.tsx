@@ -158,10 +158,14 @@ const handleSubmit = async (e: React.FormEvent) => {
       <div className="add-branch-card">
         <div className="add-branch-header">
           <button 
-            className="back-button"
-            onClick={() => navigate("/division-dashboard")}
-          >
-            ← Back to Dashboard
+               className="back-button"
+                  onClick={() => {
+                     if (user?.role === "division") navigate("/division-dashboard");
+                     else if (user?.role === "circle") navigate("/circle-dashboard");
+                     else navigate("/"); // fallback
+                      }}
+>
+                  ← Back to Dashboard
           </button>
           <div className="logo-container">
             <img src={logo} alt="India Post Logo" className="logo" />

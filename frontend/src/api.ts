@@ -28,7 +28,6 @@ export interface ProfileResponse {
   profile: User;
 }
 
-
 export interface DashboardResponse {
   branch_id?: number; // changed to number ✅ to match DashboardData
   months?: string[];
@@ -39,6 +38,37 @@ export interface DashboardResponse {
 export interface SubmitResponse {
   message: string;
   success: boolean;
+}
+
+// Update the Branch interface in api.ts
+export interface Branch {
+  branch_id: number;
+  branch_code: string;
+  branch_name: string;
+  manager_name: string;
+  phone: string;
+}
+
+export interface BranchesResponse {
+  branches: Branch[];
+  error?: string;
+}
+
+// ---------------- Submitted Reports Types ----------------
+export interface SubmittedReport {
+  report_id: number;
+  district_id: number;
+  division_name: string;
+  manager_name: string;
+  phone: string;
+  file_path: string;
+  created_at: string;
+  generated_by_user: string;
+}
+
+export interface SubmittedReportsResponse {
+  reports: SubmittedReport[];
+  error?: string;
 }
 
 // ---------------- AUTH APIs ----------------

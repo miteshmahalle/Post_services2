@@ -171,3 +171,52 @@ def division_dashboard(user):
         "year": current_year,
         "months": months
     })
+    
+    # ===========================
+# Circle Dashboard
+# ===========================
+@bp.route('/circle', methods=['GET'])
+@token_required
+def circle_dashboard(user):
+    if user['role'] != 'circle':
+        return jsonify({"error": "Unauthorized"}), 403
+
+    circle_id = user['branch_id']
+    current_year = datetime.date.today().year
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    try:
+        # 1️⃣ Count divisions under this circle
+        cur.execute("""
+            SELECT COUNT(*) AS count 
+            FROM branches 
+            WHERE parent_id = %s AND level = 'division'
+        """, (circle_id,))
+        divisions_count = cur.fetchone()["count"]
+
+        # 2️⃣ Count branches under those divisions
+        cur.execute("""
+            SELECT COUNT(*) AS count 
+            FROM branches 
+            WHERE parent_id IN (
+                SELECT branch_id FROM branches 
+                WHERE parent_id = %s AND level = 'division'
+            )
+        """, (circle_id,))
+        branches_count = cur.fetchone()["count"]
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+    return jsonify({
+        "circle_id": circle_id,
+        "year": current_year,
+        "divisions_count": divisions_count,
+        "branches_count": branches_count
+    })
+

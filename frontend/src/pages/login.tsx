@@ -63,7 +63,7 @@ const LoginPage: React.FC = () => {
       } else if (res.user.role === "circle") {
         navigate("/circle-dashboard");
       } else {
-        navigate("/"); // fallback to homepage if role not matched
+        navigate("/Homepage"); // fallback to homepage if role not matched
       }
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");

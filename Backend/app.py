@@ -9,7 +9,8 @@ from controllers import (
     division_esg_controller,
     branch_esg_controller,
     #brsr_controller,
-    validate_controller
+    validate_controller,
+    fetch_data_controller
 )
 
 app = Flask(__name__)
@@ -25,7 +26,7 @@ app.register_blueprint(division_esg_controller.bp, url_prefix="/api/division_esg
 app.register_blueprint(branch_esg_controller.bp, url_prefix="/api/branch_esg")
 #app.register_blueprint(brsr_controller.bp, url_prefix="/api/brsr")
 app.register_blueprint(validate_controller.bp, url_prefix="/api/validate")
-
+app.register_blueprint(fetch_data_controller.bp, url_prefix="/api/fetch_data")
 # Ensure reports folder exists
 if not os.path.exists('reports'):
     os.makedirs('reports')
