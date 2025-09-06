@@ -183,6 +183,7 @@ const BRSRReport: React.FC = () => {
             <div className="report-header">
               <div>
                 <h2>Welcome, {user?.manager_name}</h2>
+                <p>Business Responsibility and Sustainability Report for {user?.division_name}</p>
               </div>
             </div>
             
