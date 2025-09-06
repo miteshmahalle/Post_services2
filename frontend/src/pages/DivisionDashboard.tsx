@@ -79,7 +79,7 @@ const DivisionDashboard: React.FC = () => {
         <div className="nav-text">
         <h2> Division Dashboard for {user?.manager_name}</h2> 
         </div>
-      </nav> */}
+      </nav> 
 
       <div className="dashboard-layout">
         {/* Fixed Sidebar */}
