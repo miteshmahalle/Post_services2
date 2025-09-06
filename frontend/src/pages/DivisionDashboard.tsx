@@ -71,12 +71,12 @@ const DivisionDashboard: React.FC = () => {
         <Header />
       </div>
 
-      {/* Fixed Navigation */}
-      <nav className="main-navigation fixed-nav">
-        <div className="nav-container">
-          
+      {/* Fixed Navigation
+       <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Business Responsibility and Sustainability Reporting </h2> 
         </div>
-      </nav>
+      </nav> */}
 
       <div className="dashboard-layout">
         {/* Fixed Sidebar */}

@@ -1,98 +1,135 @@
-// src/pages/DivisionDashboard.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Header from "../components/Header";
+import CircleSidebar from "../components/CircleSidebar";
+import Circletable from "../pages/Circletable";
+import { dashboardApi } from "../api";
+import "../style/circledashboard.css";
 
-interface Month {
-  name: string;
-  value: string;
-  submitted: boolean;
+interface CircleDashboardData {
+  year: number;
+  circle_id: number;
 }
 
-interface Branch {
-  branch_id: number;
-  branch_code: string;
-  branch_name: string;
-  level: string;
-  state: string;
-  pincode: string;
-}
+const CircleDashboard: React.FC = () => {
+  const [data, setData] = useState<CircleDashboardData | null>(null);
 
-interface Stats {
-  avg_energy_kwh: number;
-  total_energy_bill: number;
-  total_training_hours: number;
-}
+  // Get token & user from Redux
+  const token = useSelector((state: any) => state.auth.token);
+  const user = useSelector((state: any) => state.auth.user);
 
-interface DivisionDashboardProps {
-  currentYear: number;
-  username: string;
-  role: string;
-  branchesCount: number;
-  stats: Stats;
-  months: Month[];
-  branches: Branch[];
-}
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await dashboardApi.getCircleDashboard(token);
+        setData(result as CircleDashboardData);
+      } catch (error) {
+        console.error("Error loading circle dashboard:", error);
+      }
+    };
+    fetchData();
+  }, [token, user]);
 
-const CircleDashboard: React.FC<DivisionDashboardProps> = ({
-  currentYear,
-  username,
-  role,
-  branchesCount,
-  stats,
-  months,
-  branches,
-}) => {
+  if (!data) return <p className="loading-text">Loading Circle Dashboard...</p>;
+
   return (
-    <div className="container my-4">
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-primary">Division Dashboard – {currentYear}</h2>
-        <div>
-          Logged in as <strong>{username}</strong> ({role})
-        </div>
+    <div className="circle-dashboard">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
       </div>
 
-      {/* KPI Cards */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Branches</h6>
-            <h3>{branchesCount}</h3>
+      <div className="dashboard-layout">
+        {/* Sidebar */}
+        <CircleSidebar />
+
+        {/* Content */}
+        <div className="dashboard-content scrollable-content">
+          {/* Welcome Section just below header */}
+          <div className="welcome-section">
+            <h2>Welcome, {user?.manager_name}</h2>
+            <p>Last logged in on {new Date().toLocaleDateString()}</p>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Avg Energy (kWh)</h6>
-            <h3>{stats.avg_energy_kwh || 0}</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Total Energy Bill</h6>
-            <h3>₹ {stats.total_energy_bill || 0}</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Training Hours</h6>
-            <h3>{stats.total_training_hours || 0}</h3>
-          </div>
+
+          {/* Submitted Reports Table */}
+          <Circletable />
         </div>
       </div>
+    </div>
+  );
+};
 
-      {/* Generate Report */}
-      <div className="mb-4 text-center">
-        <button
-          className="btn btn-primary btn-lg"
-          onClick={() => {
-            // replace with actual API navigation
-            window.location.href = "/generate-brsr";
-          }}
-        >
-                    📊 Generate BRSR Report
-                  </button>
-                </div>
-              </div>
-            );
-          };
-          
-          export default CircleDashboard;
+export default CircleDashboard;
+
+// import React, { useEffect, useState } from "react";
+// import { useSelector } from "react-redux";
+// import Header from "../components/Header";
+// import CircleSidebar from "../components/CircleSidebar";
+// import { dashboardApi } from "../api";
+// import "../style/circledashboard.css";
+
+// interface CircleDashboardData {
+//   year: number;
+//   circle_id: number;
+//   divisionsCount: number;
+//   branchesCount: number;
+// }
+
+// const CircleDashboard: React.FC = () => {
+//   const [data, setData] = useState<CircleDashboardData | null>(null);
+
+//   // Get token & user from Redux
+//   const token = useSelector((state: any) => state.auth.token);
+//   const user = useSelector((state: any) => state.auth.user);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const result = await dashboardApi.getCircleDashboard(token);
+//         setData(result as CircleDashboardData);
+//       } catch (error) {
+//         console.error("Error loading circle dashboard:", error);
+//       }
+//     };
+//     fetchData();
+//   }, [token, user]);
+
+//   if (!data) return <p className="loading-text">Loading Circle Dashboard...</p>;
+
+//   return (
+//     <div className="circle-dashboard">
+//       {/* Fixed Header */}
+//       <div className="fixed-header">
+//         <Header />
+//       </div>
+
+//       <div className="dashboard-layout">
+//         {/* Sidebar */}
+//         <CircleSidebar />
+
+//         {/* Content */}
+//         <div className="dashboard-content scrollable-content">
+//           {/* Welcome Section just below header */}
+//           <div className="welcome-section">
+//             <h2>Welcome, {user?.manager_name}</h2>
+//             <p>Last logged in on {new Date().toLocaleDateString()}</p>
+//           </div>
+
+//           {/* Summary statistics */}
+//           <div className="summary-stats">
+//             <div className="stat-card">
+//               <div className="stat-number">{data.divisionsCount}</div>
+//               <div className="stat-label">Total Divisions</div>
+//             </div>
+//             <div className="stat-card">
+//               <div className="stat-number">{data.branchesCount}</div>
+//               <div className="stat-label">Total Branches</div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CircleDashboard;

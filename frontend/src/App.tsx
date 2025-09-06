@@ -16,7 +16,7 @@ import CircleDashboard from "./pages/CircleDashboard";
 import ProfileView from "./pages/ProfileView";
 import ProfileEdit from "./pages/ProfileEdit";
 import Add_branch from "./pages/Add_branch";
-
+import RegisteredList from "./pages/RegisteredList"; // Import the RegisteredList component
 
 // Protected Route wrapper
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -92,6 +92,17 @@ function App() {
             </PrivateRoute>
           }
         />
+
+         {/* Add the RegisteredList route with PrivateRoute */}
+        <Route 
+          path="/registered-list" 
+          element={
+            <PrivateRoute>
+              <RegisteredList />
+            </PrivateRoute>
+          }
+        />
+          
         <Route 
           path="/add-branch" 
           element={
@@ -116,19 +127,7 @@ function App() {
           path="/circle-dashboard/*"
           element={
             <PrivateRoute>
-              <CircleDashboard
-                currentYear={new Date().getFullYear()}
-                username=""
-                role="circle"
-                branchesCount={0}
-                stats={{
-                  avg_energy_kwh: 0,
-                  total_energy_bill: 0,
-                  total_training_hours: 0,
-                }}
-                months={[]}
-                branches={[]}
-              />
+              <CircleDashboard/>
             </PrivateRoute>
           }
         />

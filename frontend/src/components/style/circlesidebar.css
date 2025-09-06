@@ -1,0 +1,92 @@
+/* src/components/style/circlesidebar.css */
+
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+}
+
+/* Sidebar Header - Circle title */
+.sidebar-header {
+  position: sticky;
+  top: 0;
+  /* background: rgba(255, 255, 255, 0.12); */
+  color: white;
+  padding: 85px 4px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
+  z-index: 101;
+}
+
+Navigation section
+.nav-section {
+  padding: 10px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-left-color: #fbbf24;
+}
+
+/* Active nav item */
+.nav-item-active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-left-color: #fbbf24;
+}
+
+/* Support section */
+.support-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 0;
+}
+
+.support-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.support-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+/* ✅ Add this at the bottom */
+.menu-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 24px;
+  text-transform: uppercase;
+}
