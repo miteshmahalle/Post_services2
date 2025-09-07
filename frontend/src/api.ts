@@ -49,6 +49,19 @@ export interface SubmitResponse {
   success: boolean;
 }
 
+// Add Change Password types
+export interface ChangePasswordRequest {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface ChangePasswordResponse {
+  message: string;
+  success?: boolean;
+  error?: string;
+}
+
 // Update the Branch interface in api.ts
 export interface Branch {
   branch_id: number;
@@ -103,6 +116,14 @@ export const authApi = {
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     );
+    return res.data;
+  },
+
+  // NEW: Change Password API
+  changePassword: async (token: string, passwordData: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+    const res = await api.post<ChangePasswordResponse>("/auth/change-password", passwordData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return res.data;
   },
 };

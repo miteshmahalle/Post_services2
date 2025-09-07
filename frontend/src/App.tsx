@@ -18,7 +18,9 @@ import ProfileEdit from "./pages/ProfileEdit";
 import Add_branch from "./pages/Add_branch";
 import DivisionReport from "./pages/DivisionReport";
 import BranchReport from "./pages/BRSRReport";
-import RegisteredList from "./pages/RegisteredList"; // Import the RegisteredList component
+import RegisteredList from "./pages/RegisteredList";
+import ChangePassword from "./components/ChangePassword";
+ // Import the RegisteredList component
 
 // Protected Route wrapper
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -84,7 +86,15 @@ function App() {
             </PrivateRoute>
           }
         />
-
+        <Route
+          path="/change-password"
+          element={
+            <PrivateRoute>
+              <ChangePassword
+              />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/division-report"
           element={

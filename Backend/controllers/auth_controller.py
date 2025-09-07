@@ -69,64 +69,6 @@ def token_required(f):
         return f(current_user, *args, **kwargs)
     return decorated
 
-# ---------------- REGISTER ----------------
-# @bp.route('/register', methods=['POST'])
-# def register():
-#     data = request.get_json()
-#     branch_code = data.get('branch_code')
-#     branch_name = data.get('branch_name')
-#     level = data.get('level')
-#     parent_id = data.get('parent_id') or None
-#     manager_name = data.get('manager_name')
-#     email = data.get('email')
-#     phone = data.get('phone')
-#     address = data.get('address')
-#     pincode = data.get('pincode')
-#     state = data.get('state')
-#     username = data.get('username')
-#     password = data.get('password')
-
-#     # Validate input
-#     if not (branch_code and branch_name and level and username and password):
-#         return jsonify({"error": "Please fill required fields"}), 400
-
-#     conn = get_db_connection()
-#     cur = conn.cursor(dictionary=True)
-
-#     try:
-#         # Check duplicates
-#         cur.execute("SELECT branch_id FROM branches WHERE email = %s", (email,))
-#         if cur.fetchone():
-#             return jsonify({"error": "Email already exists"}), 400
-
-#         cur.execute("SELECT branch_id FROM branches WHERE phone = %s", (phone,))
-#         if cur.fetchone():
-#             return jsonify({"error": "Phone already exists"}), 400
-
-#         # Insert branch
-#         cur.execute("""
-#             INSERT INTO branches 
-#             (branch_code, branch_name, level, parent_id, manager_name, email, phone, address, pincode, state)
-#             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-#         """, (branch_code, branch_name, level, parent_id, manager_name, email, phone, address, pincode, state))
-#         branch_id = cur.lastrowid
-
-#         # Insert user
-#         password_hash = generate_password_hash(password)
-#         cur.execute("""
-#             INSERT INTO users (branch_id, username, password_hash, role)
-#             VALUES (%s,%s,%s,%s)
-#         """, (branch_id, username, password_hash, level))
-
-#         conn.commit()
-#         return jsonify({"message": "Registered successfully"}), 201
-
-#     except mysql.connector.Error as e:
-#         conn.rollback()
-#         return jsonify({"error": str(e)}), 500
-#     finally:
-#         cur.close()
-#         conn.close()
 
 
 @bp.route('/register', methods=['POST'])
@@ -425,3 +367,70 @@ def update_profile(current_user):   # ✅ Accept current_user here
         conn.close()
         print("[INFO] DB connection closed")
 
+@bp.route('/change-password', methods=['POST'])
+@token_required
+def change_password(current_user):
+    data = request.get_json()
+    
+    # Validate required fields
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    current_password = data.get('current_password')
+    new_password = data.get('new_password')
+    confirm_password = data.get('confirm_password')
+    
+    if not all([current_password, new_password, confirm_password]):
+        return jsonify({"error": "All fields are required"}), 400
+    
+    # Check if new passwords match
+    if new_password != confirm_password:
+        return jsonify({"error": "New passwords do not match"}), 400
+    
+    # Check password complexity
+    if len(new_password) < 6:
+        return jsonify({"error": "Password must be at least 6 characters long"}), 400
+    
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    
+    try:
+        # Get user's current password hash
+        cur.execute("""
+            SELECT password_hash 
+            FROM postal_system.users 
+            WHERE user_id = %s
+        """, (current_user['user_id'],))
+        user = cur.fetchone()
+        
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Verify current password
+        if not check_password_hash(user['password_hash'], current_password):
+            return jsonify({"error": "Current password is incorrect"}), 400
+        
+        # Hash the new password
+        new_password_hash = generate_password_hash(new_password)
+        
+        # Update password in database
+        cur.execute("""
+            UPDATE postal_system.users 
+            SET password_hash = %s 
+            WHERE user_id = %s
+        """, (new_password_hash, current_user['user_id']))
+        
+        conn.commit()
+        
+        return jsonify({
+            "message": "Password changed successfully"
+        }), 200
+        
+    except Exception as e:
+        conn.rollback()
+        print(f"Password change error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+        
+    finally:
+        cur.close()
+        conn.close()
