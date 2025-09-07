@@ -88,7 +88,7 @@ const DivisionDashboard: React.FC = () => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="dashboard-content scrollable-content">
+        <div className="scrollable-content">
           {/* Welcome Section */}
           <div className="welcome-section">
             <h2>Welcome, {user?.manager_name}</h2>

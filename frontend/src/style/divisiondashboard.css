@@ -179,8 +179,8 @@ background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
    ------------------------------- */
 .scrollable-content {
   flex: 1;
-  margin-left: var(--sidebar-w);
-  margin-top: calc(var(--header-h) + var(--blue-header-h) + 26px);
+  margin-left: 200px;
+  margin-top: 2px;
   height: calc(100vh - var(--header-h) - var(--blue-header-h));
   overflow-y: auto;
   padding: 20px;

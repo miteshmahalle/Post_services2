@@ -49,13 +49,13 @@ const BranchDashboard: React.FC = () => {
           >
             ☰
           </button>
-          <ul className="nav-menu">
+          {/* <ul className="nav-menu">
             <li><a href="/Homepage">Home</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#reports">Reports</a></li>
             <li><a href="#contact">Contact</a></li>
             <li><a href="#notifications">Notifications</a></li>
-          </ul>
+          </ul> */}
         </div>
       </nav>
 
@@ -65,11 +65,20 @@ const BranchDashboard: React.FC = () => {
           <h2>Welcome, {user?.manager_name}</h2>
           <p>Last logged in on {new Date().toLocaleDateString()}</p>
         </div>
+      
+      <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Branch Dashboard for {user?.manager_name}</h2> 
+        </div>
+      </nav> 
 
+      <div className="fixed-sidebar">
+          <Navigation isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
+        </div>
+      
         {/* Main Dashboard Content */}
         <div className="dashboard-main">
-          <Navigation isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
-
+      
           <div className="dashboard-right">
             {/* ✅ Dashboard shows by default */}
             <Dashboard months={data.months} year={data.year} />

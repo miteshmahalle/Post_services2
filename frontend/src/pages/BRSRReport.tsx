@@ -178,7 +178,7 @@ const BRSRReport: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="dashboard-content scrollable-content">
+        <div className="scrollable-content">
           <div className="welcome-section">
             <div className="report-header">
               <div>

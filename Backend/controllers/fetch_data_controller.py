@@ -119,6 +119,7 @@ def get_all_branches(current_user):
         conn.close()
 
 # Add to your fetch_data_controller.py or create a new report_controller.py
+# Add to your fetch_data_controller.py or create a new report_controller.py
 @bp.route('/generate-report', methods=['POST'])
 @token_required
 def generate_report(current_user):
@@ -132,7 +133,7 @@ def generate_report(current_user):
     if not yearly_data:
         return jsonify({"error": "No yearly data provided"}), 400
     
-    # Use the first year's data (assuming one year per request)
+    # Use the first year's data
     report_data = yearly_data[0]
     year = report_data.get('year')
     
@@ -158,19 +159,13 @@ def generate_report(current_user):
         if not division_info:
             return jsonify({"error": "Division not found"}), 404
         
-        # Merge division info with report data
-        full_report_data = {**division_info, **report_data}
-        
-        # 2. Generate PDF (using year instead of reporting_month)
-        # pdf_path = generate_pdf_report(full_report_data, year)
-        
-        # 3. Store report metadata in database (without reporting_month)
+        # 2. Store report metadata in database (without file_path)
         cur.execute("""
             INSERT INTO brsr_reports 
             (district_id, avg_energy_kwh, total_energy_bill, 
              avg_fuel_litres, avg_paper_reams, total_waste_kg, avg_water_litres,
-             total_training_hours, branches_count, generated_by, file_path, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'submitted')
+             total_training_hours, branches_count, generated_by, status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'submitted')
         """, (
             division_id,
             report_data.get('avg_energy_kwh'),
@@ -182,15 +177,13 @@ def generate_report(current_user):
             report_data.get('avg_training_hours'),
             # You might need to calculate branches_count differently
             1,  # Placeholder - adjust as needed
-            current_user['user_id'],
-            # pdf_path
+            current_user['user_id']
         ))
         
         conn.commit()
         
         return jsonify({
-            "message": "Report generated successfully",
-            # "pdf_url": f"/api/reports/{os.path.basename(pdf_path)}",
+            "message": "Report submitted successfully",
             "report_id": cur.lastrowid
         })
         
@@ -200,62 +193,6 @@ def generate_report(current_user):
     finally:
         cur.close()
         conn.close()
-
-# def generate_pdf_report(data, year):
-#     # Create PDF using reportlab or weasyprint
-#     # Use year instead of reporting_month in the filename
-#     filename = f"BRSR_Report_{data['division_id']}_{year}.pdf"
-#     save_path = os.path.join('reports', filename)
-    
-#     # Example with reportlab
-#     from reportlab.lib.pagesizes import letter
-#     from reportlab.pdfgen import canvas
-    
-#     c = canvas.Canvas(save_path, pagesize=letter)
-#     c.drawString(100, 750, f"BRSR Report - {data['division_name']}")
-#     c.drawString(100, 730, f"Reporting Year: {year}")  # Changed from Period to Year
-#     c.drawString(100, 710, f"Manager: {data['manager_name']}")
-    
-#     # Add all your data fields...
-#     y_position = 690
-#     c.drawString(100, y_position, f"Average Energy Consumption (kWh): {data.get('avg_energy_kwh', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Energy Bill: {data.get('avg_energy_bill', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Fuel Consumption (Liters): {data.get('avg_fuel_litres', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Paper Consumption (Reams): {data.get('avg_paper_reams', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Waste Generated (kg): {data.get('avg_waste_kg', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Water Consumption (Liters): {data.get('avg_water_litres', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Training Hours: {data.get('avg_training_hours', 'N/A')}")
-#     y_position -= 20
-#     c.drawString(100, y_position, f"Average Complaints Count: {data.get('avg_complaints_count', 'N/A')}")
-    
-#     c.save()
-    
-#     return save_path
-
-# @bp.route('/reports/<filename>', methods=['GET'])
-# def download_report(filename):
-#     token = request.args.get('token')
-    
-#     if not token:
-#         return jsonify({"error": "Token required"}), 401
-        
-#     # Verify token (you'll need to implement this)
-#     current_user = verify_token(token)
-#     if not current_user or current_user['role'] not in ['division', 'circle']:
-#         return jsonify({"error": "Unauthorized"}), 403
-    
-#     file_path = os.path.join('reports', filename)
-    
-#     if not os.path.exists(file_path):
-#         return jsonify({"error": "Report not found"}), 404
-    
-#     return send_file(file_path, as_attachment=True)
 
 @bp.route('/submitted-reports', methods=['GET'])
 @token_required
@@ -274,7 +211,6 @@ def get_submitted_reports(current_user):
                 b.branch_name as division_name,
                 b.manager_name,
                 b.phone,
-                br.file_path,
                 br.created_at,
                 u.username as generated_by_user
             FROM brsr_reports br

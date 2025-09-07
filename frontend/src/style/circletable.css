@@ -17,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 32px;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  background: #1e293b; /* Sidebar blue color */
   color: white;
 }
 
@@ -25,46 +25,21 @@
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-}
-
-.table-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.refresh-btn, .export-btn {
-  padding: 10px 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.refresh-btn:hover, .export-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  text-align: center;
+  flex: 1;
 }
 
 .table-container {
   overflow-x: auto;
 }
 
-.branches-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-}
-
-.branches-table th {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  color: #374151;
+/* MORE SPECIFIC SELECTOR FOR TABLE HEADERS */
+.branches-table thead tr th {
+  background:  #1e293b !important; /* Sidebar blue color with important */
+  color: white !important;
   font-weight: 700;
   padding: 16px 20px;
-  text-align: left;
+  text-align: center;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -76,11 +51,19 @@
   border-bottom: 1px solid #e5e7eb;
   color: #374151;
   font-size: 15px;
+  text-align: center;
+}
+
+/* Left align specific columns if needed */
+.branches-table td:nth-child(1), /* Report ID */
+.branches-table td:nth-child(2), /* Division Name */
+.branches-table td:nth-child(3), /* Manager Name */
+.branches-table td:nth-child(4) { /* Phone */
+  text-align: left;
 }
 
 .branches-table tr:hover {
   background: #f8fafc;
-  transform: translateX(2px);
   transition: all 0.2s ease;
 }
 
@@ -93,29 +76,24 @@
 
 /* Action Buttons */
 .action-btn {
-  padding: 10px 20px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
 }
 
 .download-btn {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
   border: 1px solid #10b981;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
 .download-btn:hover {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
 }
 
 /* Loading State */
@@ -126,70 +104,42 @@
   height: 200px;
   font-size: 18px;
   color: #64748b;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: #f8fafc;
   border-radius: 16px;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .table-header {
-    padding: 20px 24px;
-  }
-  
-  .branches-table th,
-  .branches-table td {
-    padding: 14px 16px;
-  }
+/* Error State */
+.error-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #dc2626;
+  background: #fef2f2;
+  border-radius: 16px;
+  border: 1px solid #fecaca;
+  padding: 20px;
+  text-align: center;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
   .table-header {
     flex-direction: column;
     gap: 16px;
-    align-items: flex-start;
+    align-items: center;
     padding: 16px 20px;
   }
   
-  .table-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-  
-  .branches-table {
-    font-size: 14px;
-  }
-  
-  .branches-table th,
+  .branches-table thead tr th,
   .branches-table td {
     padding: 12px 14px;
-  }
-  
-  .action-btn {
-    padding: 8px 16px;
     font-size: 13px;
-  }
-  
-  .table-container {
-    overflow-x: auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .table-header h3 {
-    font-size: 18px;
-  }
-  
-  .branches-table {
-    font-size: 13px;
-  }
-  
-  .branches-table th,
-  .branches-table td {
-    padding: 10px 12px;
   }
   
   .action-btn {
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 11px;
   }
 }

@@ -1,50 +1,32 @@
+/* src/style/branchdashboard.css */
 .branch-dashboard {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background: #f8f9fa;
+  position: relative;
 }
 
-/* ✅ Layout below Header */
-.dashboard-layout {
-  display: flex;
-  flex: 1;
-  background: #f9fafb; /* subtle background */
+/* Fixed Header */
+.branch-dashboard > header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ Sidebar styling */
-.dashboard-layout .sidebar {
-  width: 240px;           /* fixed width */
-  background: #1f2937;    /* dark gray */
-  color: #fff;
-  padding: 20px 15px;
-  min-height: calc(100vh - 60px); /* full height minus header */
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
-}
-
-/* ✅ Dashboard content */
-.dashboard-content {
-  flex: 1;
-  padding: 20px;
-
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* ✅ Loading text */
-.loading-text {
-  text-align: center;
-  margin-top: 50px;
-  font-size: 18px;
-  color: #555;
-}
-
-/* Main Navigation */
+/* Fixed Main Navigation */
 .main-navigation {
+  position: fixed;
+  top: 60px; /* Adjust based on header height */
+  left: 0;
+  right: 0;
   background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
   padding: 0;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 900;
 }
 
 .nav-container {
@@ -90,6 +72,29 @@
   background-color: rgba(255,255,255,0.1);
 }
 
+
+
+/* Fixed Sidebar */
+.fixed-sidebar {
+  position: fixed;
+  top: 160px; /* Header + main navigation + blue header height */
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 160px);
+  z-index: 700;
+  overflow-y: auto;
+}
+
+/* Dashboard Content - Scrollable Area */
+.dashboard-content {
+  margin-top: 160px; /* Height of all fixed headers */
+  margin-left: 320px; /* Width of sidebar */
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+  max-width: calc(1200px - 250px);
+}
+
 /* Welcome Section */
 .welcome-section {
   background: white;
@@ -114,10 +119,7 @@
 
 /* Dashboard Layout */
 .dashboard-main {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 20px;
-  margin-top: 20px;
+  display: flex;
 }
 
 .dashboard-right {
@@ -125,91 +127,31 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  min-height: 500px; /* Ensure minimum height for profile pages */
-}
-
-/* Profile Page Styles within Dashboard */
-.branch-dashboard .profile-container {
-  background: transparent;
-  padding: 0;
-}
-
-.branch-dashboard .profile-content {
-  padding: 0;
-  max-width: 100%;
-}
-
-.branch-dashboard .profile-card {
-  margin: 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
-}
-
-.branch-dashboard .profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  padding: 0;
-}
-
-.branch-dashboard .back-to-dashboard-btn {
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.branch-dashboard .back-to-dashboard-btn:hover {
-  background: #b91c1c;
-  transform: translateY(-1px);
-}
-
-.branch-dashboard .profile-header h1 {
-  color: #1e293b;
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-/* Ensure proper spacing for profile content */
-.branch-dashboard .profile-info-grid,
-.branch-dashboard .profile-form {
-  margin: 0;
-}
-
-/* Navigation button styles */
-.side-navigation button {
-  background: none;
-  border: none;
-  color: #4a5568;
-  text-decoration: none;
-  display: block;
-  padding: 8px 0;
-  transition: color 0.3s ease;
-  font-weight: 500;
+  min-height: 500px;
   width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-size: 0.95rem;
 }
 
-.side-navigation button:hover {
-  color: #dc2626;
-  background: none;
+/* Loading text */
+.loading-text {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+  color: #555;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .dashboard-main {
-    grid-template-columns: 1fr;
+@media (max-width: 992px) {
+  .fixed-sidebar {
+    width: 200px;
   }
   
+  .dashboard-content {
+    margin-left: 200px;
+    max-width: calc(100% - 200px);
+  }
+}
+
+@media (max-width: 768px) {
   .hamburger-menu {
     display: block;
   }
@@ -218,8 +160,24 @@
     display: none;
   }
   
+  .fixed-sidebar {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+  }
+  
+  .fixed-sidebar.nav-open {
+    width: 250px;
+  }
+  
   .dashboard-content {
+    margin-left: 0;
+    max-width: 100%;
     padding: 15px;
+  }
+  
+  .blue_header, .main-navigation {
+    padding-left: 60px; /* Make space for hamburger menu */
   }
   
   .welcome-section {
@@ -234,25 +192,15 @@
   .dashboard-right {
     padding: 15px;
   }
-  
-  .branch-dashboard .profile-header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .branch-dashboard .profile-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .branch-dashboard .profile-card {
-    padding: 20px;
-  }
 }
 
 @media (max-width: 480px) {
   .dashboard-content {
     padding: 10px;
+  }
+  
+  .blue_header h2 {
+    font-size: 1.1rem;
   }
   
   .welcome-section {
@@ -269,18 +217,5 @@
   
   .dashboard-right {
     padding: 12px;
-  }
-  
-  .branch-dashboard .profile-card {
-    padding: 15px;
-  }
-  
-  .branch-dashboard .profile-header h1 {
-    font-size: 1.3rem;
-  }
-  
-  .branch-dashboard .back-to-dashboard-btn {
-    padding: 8px 16px;
-    font-size: 0.85rem;
   }
 }

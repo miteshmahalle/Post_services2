@@ -79,8 +79,8 @@
 }
 
 .login-logo {
-  width: 80px;
-  height: 80px;
+  width: 100px !important;
+  height: 70px ;
   margin: 0 auto 1rem;
   display: block;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
@@ -175,11 +175,12 @@
 }
 
 /* Login button */
+/* Login button - Updated with white text */
 .login-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  color: white;
+  /* background: linear-gradient(135deg, hsl(0, 15%, 92%) 0%, hsl(0, 8%, 93%) 100%) !important; */
+  color: #f8f3f3 ; /* Changed from rgb(228, 9, 9) to white */
   border: none;
   border-radius: 12px;
   font-size: 16px;
@@ -199,10 +200,12 @@
   box-shadow: 
     0 6px 12px rgba(220, 38, 38, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: white; /* Ensure text stays white on hover */
 }
 
 .login-btn:active {
   transform: translateY(0);
+  color: white; /* Ensure text stays white when active */
 }
 
 .login-btn:disabled {
@@ -210,6 +213,7 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+  color: white; /* Ensure text stays white when disabled */
 }
 
 /* Footer */

@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import logo from "../images/India-Post-Color.png";
 import "../style/HomePage.css";
 
 // Import logo from public folder or use placeholder
@@ -30,7 +32,7 @@ const Homepage: React.FC = () => {
       <header className="homepage-header">
         {/* Logo and India Post Text */}
         <div className="header-logo-section">
-          <img src={logoUrl} alt="India Post Logo" className="header-logo" />
+          <img src={logo} alt="India Post Logo" className="header-logo" />
           <div className="header-logo-text">
             <h2>भारतीय डाक</h2>
             <p>India Post</p>
@@ -326,7 +328,7 @@ const Homepage: React.FC = () => {
           <div className="footer-content">
             <div className="footer-section">
               <div className="footer-logo">
-                <img src={logoUrl} alt="India Post Logo" />
+                <img src={logo} alt="India Post Logo" />
                 <div>
                   <h4>भारतीय डाक</h4>
                   <p>India Post</p>

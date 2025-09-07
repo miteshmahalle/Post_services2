@@ -194,7 +194,7 @@ const DivisionReport: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="dashboard-content scrollable-content">
+        <div className="scrollable-content">
           <div className="welcome-section">
   <h2>Welcome, {user?.manager_name}</h2>
   
