@@ -22,6 +22,34 @@ export interface AuthResponse {
   user: User;
 }
 
+// ---------------- BRSR Report Submission ----------------
+export interface BRSRReportRequest {
+  division_id: number;
+  division_brsr_report_yearly: Array<{
+     reporting_month: string; 
+    avg_energy_kwh: number;
+    avg_energy_bill: number;
+    avg_fuel_litres: number;
+    avg_paper_reams: number;
+    avg_waste_kg: number;
+    avg_water_litres: number;
+    avg_training_hours: number;
+    avg_complaint_count: number;
+  }>;
+}
+
+export interface BRSRReportResponse {
+  message: string;
+  report_id: number;
+  error?: string;
+}
+
+export interface SubmissionStatusResponse {
+  has_submitted: boolean;
+  last_submission_date?: string;
+  error?: string;
+}
+
 export interface RegisterResponse {
   message?: string;
   success?: boolean;
@@ -226,7 +254,6 @@ export const divisionDashboard = {
 }
 
 // ---------------- REPORT TABLE APIs ----------------
-// In your api.ts file, update the report_tableApi
 export const report_tableApi = {
   getSubmittedReports: async (token: string): Promise<SubmittedReportsResponse> => {
     const res = await api.get<SubmittedReportsResponse>("/fetch_data/submitted-reports", {
@@ -239,6 +266,23 @@ export const report_tableApi = {
 export const branchApi = {
   getBranchesList: async (token: string): Promise<BranchesResponse> => {
     const res = await api.get<BranchesResponse>("/fetch_data/branches/list", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
+};
+
+// ---------------- BRSR REPORT APIs ----------------
+export const brsrReportApi = {
+  submitBRSRReport: async (token: string, reportData: BRSRReportRequest): Promise<BRSRReportResponse> => {
+    const res = await api.post<BRSRReportResponse>("/fetch_data/generate-report", reportData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  },
+
+  checkSubmissionStatus: async (token: string, division_id: number): Promise<SubmissionStatusResponse> => {
+    const res = await api.get<SubmissionStatusResponse>(`/fetch_data/check-submission-status?division_id=${division_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
