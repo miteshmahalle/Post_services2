@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { report_tableApi } from "../api";
@@ -83,7 +84,7 @@ const Circletable: React.FC = () => {
           <h3>Submitted BRSR Reports</h3>
         </div>
 
-        <div className="table-container">
+        <div >
           <table className="branches-table">
             <thead>
               <tr>

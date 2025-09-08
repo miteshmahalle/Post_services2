@@ -36,7 +36,7 @@
 
 /* Push content to the right and below headers */
 .profile-content {
-  margin-left: 400px; /* same as sidebar width */
+  margin-left: 290px; /* same as sidebar width */
   margin-top: 130px;  /* header + blue_header height */
   max-width: 900px;
   padding: 20px;
@@ -388,6 +388,7 @@
 @media (max-width: 480px) {
   .profile-card {
     padding: 20px;
+    
   }
   
   .profile-header h1 {

@@ -19,6 +19,8 @@
   padding: 24px 32px;
   background: #1e293b; /* Sidebar blue color */
   color: white;
+  margin: 0;
+  border-bottom: 0; /* Ensure no border at bottom */
 }
 
 .table-header h3 {
@@ -31,9 +33,21 @@
 
 .table-container {
   overflow-x: auto;
+  margin: 0;
+   padding: 0; /* Remove any padding */
 }
 
 /* MORE SPECIFIC SELECTOR FOR TABLE HEADERS */
+.branches-table {
+  width: 100%;
+  border-collapse: collapse; /* ENSURES table cells are connected */
+  margin: 0; /* REMOVES any default table margin */
+    border-spacing: 0; /* Remove spacing between cells */
+}
+/* FIXED: Force header connection */
+.branches-table thead {
+  background: #1e293b !important; /* Match the table header background */
+}
 .branches-table thead tr th {
   background:  #1e293b !important; /* Sidebar blue color with important */
   color: white !important;

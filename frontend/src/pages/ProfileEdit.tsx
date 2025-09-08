@@ -103,7 +103,7 @@ const ProfileEdit: React.FC = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate(getDashboardPath());
+    navigate("/view/profile");
   };
 
   return (
@@ -124,9 +124,9 @@ const ProfileEdit: React.FC = () => {
             className="back-to-dashboard-btn"
             onClick={handleBackToDashboard} // Use the new function
           >
-            ← Back to Dashboard
+            ← Back
           </button>
-          <h1>Edit Profile</h1>
+          {/* <h1>Edit Profile</h1> */}
         </div>
 
         {/* ... rest of your component remains the same ... */}

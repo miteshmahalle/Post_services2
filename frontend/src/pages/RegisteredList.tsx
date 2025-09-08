@@ -123,9 +123,9 @@ const RegisteredList: React.FC = () => {
       
           <div className="registered-list-card">
             <div className="registered-list-header">
-              <div className="logo-container">
+              {/* <div className="logo-container">
                 <img src={logo} alt="India Post Logo" className="logo" />
-              </div>
+              </div> */}
               <h2>{getHeaderText()}</h2>
               <div className="action-buttons">
                 <button 

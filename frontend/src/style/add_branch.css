@@ -49,12 +49,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin:20px 0 15px 0;
+  margin:20px 0 45px 0;
   gap: 10px;
 }
 
 .logo {
-  height: 50px;
+  height: 70px;
+  margin-left: 290px;
+
   width: auto;
 }
 
@@ -134,7 +136,7 @@
 }
 
 .submit-button {
-  background: #3498db;
+  background: hsl(0, 97%, 44%);
   color: white;
   border: none;
   padding: 12px 30px;
@@ -146,7 +148,7 @@
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #2980b9;
+  background: #aa1b11;
 }
 
 .submit-button:disabled {

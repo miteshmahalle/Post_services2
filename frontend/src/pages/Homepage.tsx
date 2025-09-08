@@ -50,9 +50,9 @@ const Homepage: React.FC = () => {
           <button className="login-btn" onClick={handleLogin}>
             Login
           </button>
-          <button className="register-btn" onClick={handleRegister}>
+          {/* <button className="register-btn" onClick={handleRegister}>
             Register
-          </button>
+          </button> */}
         </div>
       </header>
 

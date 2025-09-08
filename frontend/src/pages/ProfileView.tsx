@@ -90,7 +90,7 @@ const ProfileView: React.FC = () => {
             ← Back to Dashboard
           </button> */}
 
-          <h1>Manager Profile</h1>
+          {/* <h1>Manager Profile</h1> */}
         </div>
 
         <div className="profile-card">

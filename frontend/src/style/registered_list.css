@@ -64,7 +64,7 @@
 
 /* Main Content Area - Scrollable */
 .registered-list-card {
-  margin-left: 250px; /* Width of sidebar */
+  margin-left: 210px; /* Width of sidebar */
   padding: 20px;
   width: calc(100% - 250px);
   overflow-y: auto;
@@ -77,10 +77,13 @@
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
+ 
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: 20px;
+  
+ 
   flex-wrap: wrap;
   gap: 15px;
 }
