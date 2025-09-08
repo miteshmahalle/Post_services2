@@ -234,6 +234,14 @@ export const report_tableApi = {
     });
     return res.data;
   },
+  // 🔹 New API for division report
+    getDivisionReport: async (divisionId: number, token: string): Promise<any> => {
+      const res = await api.get(`/fetch_data/division_report?division_id=${divisionId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    },
+
 };
 
 export const branchApi = {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { report_tableApi } from "../api";
 import "../style/circletable.css";
+import { downloadAveragesPdf } from "../utils/pdfBRSRReport";
 
 interface SubmittedReport {
   report_id: number;
@@ -67,10 +68,35 @@ const Circletable: React.FC = () => {
     return new Date(dateString).toLocaleDateString('en-GB');
   };
 
-  // Download handler for future use
-  const handleDownload = (filename: string) => {
-    console.log("Download would be triggered for:", filename);
-  };
+ const handleDownload = async (divisionId: number, divisionName: string, managerName: string) => {
+  try {
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const result = await report_tableApi.getDivisionReport(divisionId, token);
+
+    if (result.averages && result.averages.length > 0) {
+      const averages = { ...result.averages[0], address: result.address }; 
+
+      downloadAveragesPdf(
+        averages,
+        divisionName,       // pass division name
+        managerName,        // pass manager name
+        "BRSR_Report"   // title
+      );
+
+      console.log(`Division ${divisionId} report:`, averages);
+    } else {
+      console.warn("No averages found in API response");
+    }
+  } catch (error) {
+    console.error("Error fetching division report:", error);
+  }
+};
+
+
 
   if (loading) return <p className="loading-text">Loading Submitted Reports...</p>;
   
@@ -111,13 +137,17 @@ const Circletable: React.FC = () => {
                       <td>{formatDate(report.created_at)}</td>
                       <td>{report.generated_by_user}</td>
                       <td>
-                        <button 
-                          onClick={() => handleDownload(filename)}
+                        <button
+                          onClick={() => handleDownload(
+                            report.district_id,       // divisionId
+                            report.division_name,     // divisionName
+                            report.manager_name       // managerName
+                          )}
                           className="action-btn download-btn"
-                          title="Download PDF (Future Feature)"
                         >
                           Download PDF
                         </button>
+
                       </td>
                     </tr>
                   );

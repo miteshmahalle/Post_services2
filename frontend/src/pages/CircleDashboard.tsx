@@ -30,7 +30,26 @@ const CircleDashboard: React.FC = () => {
     fetchData();
   }, [token, user]);
 
-  if (!data) return <p className="loading-text">Loading Circle Dashboard...</p>;
+  if (!data) return <div className="loader-container">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+      {/* Blue Header */}
+      <nav className="blue_header">
+        <div className="nav-text">
+          <h2>Circle Dashboard for {user?.manager_name}</h2>
+        </div>
+      </nav>
+      <div className="loader"></div>
+      {/* Sidebar */}
+        <div className="fixed-sidebar">
+          <CircleSidebar />
+        </div>
+      
+      <p className="loading-text">Loading Division Data...</p>
+    </div>;
 
   return (
     <div className="circle-dashboard">

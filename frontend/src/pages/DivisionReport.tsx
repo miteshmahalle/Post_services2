@@ -167,8 +167,23 @@ const DivisionReport: React.FC = () => {
   if (!divisionData || !branchData) {
     return (
     <div className="loader-container">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+      {/* Blue Header */}
+      <nav className="blue_header">
+        <div className="nav-text">
+          <h2>Division Reports for {user?.manager_name}</h2>
+        </div>
+      </nav>
+      {/* Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
+        </div>
       <div className="loader"></div>
-      <p className="loading-text">Loading Division Report...</p>
+      <p className="loading-text">Loading Division Data...</p>
     </div>
   );
   }
@@ -235,7 +250,6 @@ const DivisionReport: React.FC = () => {
     )}
   </div>
 </div>
-
 
           <div className="reports-container">
             {/* Division Report Section */}
