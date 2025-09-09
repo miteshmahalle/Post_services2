@@ -1,42 +1,64 @@
 // src/App.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store";
-import Login from "./pages/login";
-import Navbar from "./components/navbar";
+import { logout } from "./slices/authSlice"; // Import logout action
 
-// Import dashboards
+// Pages
+import Login from "./pages/login";
+import Homepage from "./pages/Homepage";
 import BranchDashboard from "./pages/BranchDashboard";
-import BranchESGForm from "./pages/BranchESGForm"; // ✅ NEW Import
+import BranchESGForm from "./pages/BranchESGForm";
+import DivisionESGForm from "./pages/DivisionESGForm";
 import DivisionDashboard from "./pages/DivisionDashboard";
 import CircleDashboard from "./pages/CircleDashboard";
+import ProfileView from "./pages/ProfileView";
+import ProfileEdit from "./pages/ProfileEdit";
+import Add_branch from "./pages/Add_branch";
+import DivisionReport from "./pages/DivisionReport";
+import BranchReport from "./pages/BRSRReport";
+import RegisteredList from "./pages/RegisteredList";
+import ChangePassword from "./components/ChangePassword";
+ // Import the RegisteredList component
 
 // Protected Route wrapper
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const token = useSelector((state: RootState) => state.auth.token);
-  return token ? children : <Navigate to="/login" replace />;
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+  return token && isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+  // Optional: Clear authentication on app load if you want fresh login every time
+  useEffect(() => {
+    // Uncomment the line below if you want to force logout on app start
+    // dispatch(logout());
+  }, [dispatch]);
+
   return (
     <Router>
-      {/* <Navbar /> */}
       <Routes>
-        {/* Public Route */}
+        {/* Public HomePage (default route) */}
+        <Route path="/Homepage" element={<Homepage />} />
+      
+        {/* Public Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Protected Routes */}
+        {/* Private dashboards - only accessible when authenticated */}
         <Route
-          path="/branch-dashboard"
+          path="/branch-dashboard/*"
           element={
             <PrivateRoute>
-              <BranchDashboard/>
+              <BranchDashboard />
             </PrivateRoute>
           }
         />
 
-        {/* ✅ NEW: Branch ESG Form Route */}
         <Route
           path="/branch-esg-form"
           element={
@@ -47,49 +69,103 @@ function App() {
         />
 
         <Route
-          path="/division-dashboard"
+          path="/division-esg-form"
+          element={
+            <PrivateRoute>
+              <DivisionESGForm />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/division-dashboard/*"
           element={
             <PrivateRoute>
               <DivisionDashboard
-                currentYear={new Date().getFullYear()}
-                username=""
-                role="division"
-                branchesCount={0}
-                stats={{
-                  avg_energy_kwh: 0,
-                  total_energy_bill: 0,
-                  total_training_hours: 0,
-                }}
-                months={[]}
-                branches={[]}
+              />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/change-password"
+          element={
+            <PrivateRoute>
+              <ChangePassword
+              />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/division-report"
+          element={
+            <PrivateRoute>
+              <DivisionReport
               />
             </PrivateRoute>
           }
         />
 
         <Route
-          path="/circle-dashboard"
+          path="/brsr-report"
           element={
             <PrivateRoute>
-              <CircleDashboard
-                currentYear={new Date().getFullYear()}
-                username=""
-                role="circle"
-                branchesCount={0}
-                stats={{
-                  avg_energy_kwh: 0,
-                  total_energy_bill: 0,
-                  total_training_hours: 0,
-                }}
-                months={[]}
-                branches={[]}
+              <BranchReport
+              />
+            </PrivateRoute>
+          }
+        />
+   
+        <Route
+          path="/view/profile"
+          element={
+            <PrivateRoute>
+              <ProfileView
               />
             </PrivateRoute>
           }
         />
 
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+         {/* Add the RegisteredList route with PrivateRoute */}
+        <Route 
+          path="/registered-list" 
+          element={
+            <PrivateRoute>
+              <RegisteredList />
+            </PrivateRoute>
+          }
+        />
+          
+        <Route 
+          path="/add-branch" 
+          element={
+            <PrivateRoute>
+             <Add_branch
+             />
+            </PrivateRoute>
+          }
+        />
+          
+        <Route
+          path="/edit/profile"
+          element={
+            <PrivateRoute>
+              <ProfileEdit
+              />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/circle-dashboard/*"
+          element={
+            <PrivateRoute>
+              <CircleDashboard/>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Catch all -> redirect to homepage */}
+        <Route path="*" element={<Navigate to="/Homepage" replace />} />
       </Routes>
     </Router>
   );

@@ -17,17 +17,32 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ months, year }) => {
   const navigate = useNavigate();
-  const branchId = useSelector((state: any) => state.auth.user?.branch_id); // Get branch ID from auth slice
+
+  // ✅ Pull user from Redux auth slice
+  const user = useSelector((state: any) => state.auth.user);
+  const branchId = user?.branch_id;
+  const role = user?.role;
 
   const handleMonthClick = (month: Month) => {
-    // Check if month is already submitted
     if (month.submitted) {
-      alert(`ESG Report for ${month.name} has already been submitted. View summary feature coming soon!`);
+      alert(
+        `ESG Report for ${month.name} has already been submitted. View summary feature coming soon!`
+      );
       return;
     }
-    
-    // Navigate to ESG form with month and branch ID as URL parameters
-    navigate(`/branch-esg-form?month=${month.value}&year=${year}&branchId=${branchId}`);
+
+    // ✅ Route dynamically based on role
+    if (role === "branch") {
+      navigate(
+        `/branch-esg-form?month=${month.value}&year=${year}&branchId=${branchId}`
+      );
+    } else if (role === "division") {
+      navigate(
+        `/division-esg-form?month=${month.value}&year=${year}&branchId=${branchId}`
+      );
+    } else {
+      alert("❌ Unauthorized role – ESG submission not allowed.");
+    }
   };
 
   return (
@@ -37,7 +52,9 @@ const Dashboard: React.FC<DashboardProps> = ({ months, year }) => {
         {months.map((month) => (
           <div
             key={month.value}
-            className={`month-card ${month.submitted ? "submitted" : "not-submitted"}`}
+            className={`month-card ${
+              month.submitted ? "submitted" : "not-submitted"
+            }`}
             onClick={() => handleMonthClick(month)}
             style={{ cursor: "pointer" }}
           >

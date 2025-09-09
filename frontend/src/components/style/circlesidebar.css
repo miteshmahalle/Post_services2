@@ -1,0 +1,173 @@
+/* src/components/style/circlesidebar.css */
+
+.sidebar {
+  width: 280px; /* Increased width like Division sidebar */
+  height: 100vh;
+  /* background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%); */
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 120px;
+  z-index: 100;
+  /* box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15); */
+  overflow-y: auto;
+  padding-top: 0; /* Space for fixed header */
+}
+
+/* Sidebar Header - Fixed at top */
+.sidebar-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  /* background: #1e40af; Solid blue background */
+  color: white;
+  padding: 15px 24px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  z-index: 102;
+  /* border-bottom: 0.5px solid #faf8f4; Yellow stripe like Division */
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 8px;
+}
+
+/* Navigation section */
+.nav-section {
+  padding: 15px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:12px 24px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-left: 20px solid transparent;
+  /* position: relative; */
+}
+
+.nav-arrow {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover .nav-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* Active States */
+.nav-link-active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.nav-link-active .nav-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nav-link-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: white;
+  border-radius: 0 4px 4px 0;
+}
+/* Add arrow indicator for active state
+.nav-item-active::after {
+  content: "→";
+  font-weight: bold;
+  margin-left: 8px; 
+
+}*/
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  /* border-left-color: #fbbf24; */
+}
+
+/* Active nav item */
+.nav-item-active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  /* border-left-color: #fbbf24; */
+}
+
+/* Support section */
+.support-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px 0;
+  margin-top: auto; /* Push to bottom */
+}
+
+.support-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.support-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.support-item-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.menu-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 24px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+Scrollable content
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

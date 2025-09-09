@@ -11,20 +11,21 @@
   max-width: 800px;
   margin: 0 auto;
 }
-
+/* 
 .welcome-section {
   margin-bottom: 20px;
-}
+  
+} */
 
-.welcome-message {
-  font-size: 1.2rem;
-  font-weight: 600;
+/* .welcome-message {
+  font-size: bold !important;
+  font-weight: 600px !important;
   color: #2c3e50;
   margin: 0;
   padding: 15px 0;
   border-bottom: 2px solid #dc3545;
   text-align: left;
-}
+} */
 
 .esg-form-container {
   display: flex;
@@ -38,7 +39,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 100%;
-  max-width: 700px;
+  max-width: 800px;
   transition: all 0.3s ease;
 }
 
@@ -50,19 +51,20 @@
 .esg-header {
   background: linear-gradient(135deg, #dc3545 0%, #b71c1c 100%);
   color: white;
-  padding: 30px 20px;
+  padding: 20px 50px;
   text-align: center;
   position: relative;
+  
   overflow: hidden;
 }
 
 .esg-header::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
+  top: -30%;
+  left: -30%;
   width: 200%;
-  height: 200%;
+  height: 100%;
   background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
   animation: shimmer 3s infinite;
 }
@@ -85,7 +87,7 @@
 .esg-title {
   font-size: 2rem;
   font-weight: 700;
-  margin: 10px 0 5px 0;
+  margin: 20x 30 10px 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 

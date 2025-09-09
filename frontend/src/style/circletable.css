@@ -1,0 +1,159 @@
+/* src/style/circletable.css */
+
+.circle-table-container {
+  margin-bottom: 32px;
+}
+
+.table-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  background: #1e293b; /* Sidebar blue color */
+  color: white;
+  margin: 0;
+  border-bottom: 0; /* Ensure no border at bottom */
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  flex: 1;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin: 0;
+   padding: 0; /* Remove any padding */
+}
+
+/* MORE SPECIFIC SELECTOR FOR TABLE HEADERS */
+.branches-table {
+  width: 100%;
+  border-collapse: collapse; /* ENSURES table cells are connected */
+  margin: 0; /* REMOVES any default table margin */
+    border-spacing: 0; /* Remove spacing between cells */
+}
+/* FIXED: Force header connection */
+.branches-table thead {
+  background: #1e293b !important; /* Match the table header background */
+}
+.branches-table thead tr th {
+  background:  #1e293b !important; /* Sidebar blue color with important */
+  color: white !important;
+  font-weight: 700;
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #d1d5db;
+}
+
+.branches-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* Left align specific columns if needed */
+.branches-table td:nth-child(1), /* Report ID */
+.branches-table td:nth-child(2), /* Division Name */
+.branches-table td:nth-child(3), /* Manager Name */
+.branches-table td:nth-child(4) { /* Phone */
+  text-align: left;
+}
+
+.branches-table tr:hover {
+  background: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.no-data {
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+  padding: 40px 20px;
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: 1px solid #10b981;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+}
+
+/* Loading State */
+.loading-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #64748b;
+  background: #f8fafc;
+  border-radius: 16px;
+}
+
+/* Error State */
+.error-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #dc2626;
+  background: #fef2f2;
+  border-radius: 16px;
+  border: 1px solid #fecaca;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 20px;
+  }
+  
+  .branches-table thead tr th,
+  .branches-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  
+  .action-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}

@@ -126,60 +126,97 @@ def division_dashboard(user):
     division_id = user['branch_id']
     current_year = datetime.date.today().year
 
+    print("📌 Division Dashboard Called")
+    print(f"➡️ User Division ID from token: {division_id}")
+    print(f"➡️ Current Year: {current_year}")
+
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
 
-    # Count branches under this division
-    cur.execute("SELECT COUNT(*) AS count FROM branches WHERE parent_id = %s", (division_id,))
-    branches_count = cur.fetchone()["count"]
+    try:
+        # ✅ Fetch submitted division ESG reports (fix applied: single %)
+        cur.execute("""
+            SELECT DATE_FORMAT(reporting_month, '%Y-%m') as month_key
+            FROM division_esg_data
+            WHERE division_id = %s AND YEAR(reporting_month) = %s
+        """, (division_id, current_year))
 
-    # Aggregate ESG data from all branches under this division
-    cur.execute("""
-        SELECT AVG(energy_kwh) AS avg_energy_kwh,
-               SUM(energy_bill) AS total_energy_bill,
-               SUM(fuel_litres) AS total_fuel,
-               SUM(paper_reams) AS total_paper,
-               SUM(waste_kg) AS total_waste,
-               SUM(water_litres) AS total_water,
-               SUM(training_hours) AS total_training_hours,
-               SUM(complaints_count) AS total_complaints
-        FROM esg_data
-        WHERE branch_id IN (
-            SELECT branch_id FROM branches WHERE parent_id = %s
-        )
-    """, (division_id,))
-    division_stats = cur.fetchone() or {}
+        rows = cur.fetchall()
+        print("➡️ Raw Query Results:", rows)
 
-    # Generate months list
+        submitted = {row['month_key'] for row in rows}
+        print("➡️ Submitted Months Set:", submitted)
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+    # ✅ Build months list for current year
     months = []
-    for m in range(1, 12 + 1):
+    for m in range(1, 13):
         month_date = datetime.date(current_year, m, 1)
+        month_value = month_date.strftime("%Y-%m")
         months.append({
             "name": month_date.strftime("%B"),
-            "value": month_date.strftime("%Y-%m"),
-            "submitted": False
+            "value": month_value,
+            "submitted": month_value in submitted
         })
 
-    # Fetch submitted division ESG reports
-    cur.execute("""
-        SELECT DATE_FORMAT(reporting_month, '%%Y-%%m') as month_key
-        FROM division_esg_data
-        WHERE division_id = %s AND YEAR(reporting_month) = %s
-    """, (division_id, current_year))
-    submitted = {row['month_key'] for row in cur.fetchall()}
-
-    cur.close()
-    conn.close()
-
-    # Mark submitted months
-    for month in months:
-        if month["value"] in submitted:
-            month["submitted"] = True
+    print("✅ Final Months Response:", months)
 
     return jsonify({
-        "division_id": division_id,
-        "branches_count": branches_count,
-        "stats": division_stats,
-        "months": months,
-        "year": current_year
+        "year": current_year,
+        "months": months
     })
+    
+    # ===========================
+# Circle Dashboard
+# ===========================
+@bp.route('/circle', methods=['GET'])
+@token_required
+def circle_dashboard(user):
+    if user['role'] != 'circle':
+        return jsonify({"error": "Unauthorized"}), 403
+
+    circle_id = user['branch_id']
+    current_year = datetime.date.today().year
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    try:
+        # 1️⃣ Count divisions under this circle
+        cur.execute("""
+            SELECT COUNT(*) AS count 
+            FROM branches 
+            WHERE parent_id = %s AND level = 'division'
+        """, (circle_id,))
+        divisions_count = cur.fetchone()["count"]
+
+        # 2️⃣ Count branches under those divisions
+        cur.execute("""
+            SELECT COUNT(*) AS count 
+            FROM branches 
+            WHERE parent_id IN (
+                SELECT branch_id FROM branches 
+                WHERE parent_id = %s AND level = 'division'
+            )
+        """, (circle_id,))
+        branches_count = cur.fetchone()["count"]
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+    return jsonify({
+        "circle_id": circle_id,
+        "year": current_year,
+        "divisions_count": divisions_count,
+        "branches_count": branches_count
+    })
+

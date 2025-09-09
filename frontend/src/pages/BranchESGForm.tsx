@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { dashboardApi } from "../api";
 import Header from "../components/Header";
 import "../style/branchESGForm.css";
+import logo from "../images/India-Post-Color.png";
 
 interface ESGFormData {
   reporting_month: string;
@@ -33,9 +34,14 @@ const BranchESGForm: React.FC = () => {
   const navigate = useNavigate();
   const token = useSelector((state: any) => state.auth.token);
   const user = useSelector((state: any) => state.auth.user);
+
+   // Extract query params from URL
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const month = searchParams.get("month"); // e.g. "2025-03"
   
   const [formData, setFormData] = useState<ESGFormData>({
-    reporting_month: new Date().toISOString().slice(0, 7), // Current month in YYYY-MM format
+    reporting_month: month || new Date().toISOString().slice(0, 7), // Current month in YYYY-MM format
     energy_bill: "",
     energy_kwh: "",
     fuel_litres: "",
@@ -103,16 +109,18 @@ const BranchESGForm: React.FC = () => {
       <Header />
       
       <div className="esg-main-content">
-        <div className="welcome-section">
-          <p className="welcome-message">Welcome {user?.username || "User"}</p>
-        </div>
+        {/* <div className="welcome-section">
+          <p className="welcome-message">Welcome {user?.username || "User"}
+            
+          </p>
+        </div> */}
 
         <div className="esg-form-container">
           <div className="esg-card">
             <div className="esg-header">
-              <div className="logo-container">
-                <img src="/path-to-india-post-logo.png" alt="India Post" className="india-post-logo" />
-              </div>
+              {/* <div className="logo-container">
+                <img src="/India-post-color.png" alt="India Post" className="india-post-color" />
+              </div> */}
               <h2 className="esg-title">ESG Report</h2>
               <p className="esg-subtitle">Postal Services Management System</p>
             </div>

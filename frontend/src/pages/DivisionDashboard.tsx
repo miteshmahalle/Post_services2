@@ -1,5 +1,12 @@
-// src/pages/DivisionDashboard.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Header from "../components/Header";
+import DivisionSidebar from "../components/divisionsidebar";
+import DivisionScroll from "../components/divisionscroll";
+import { dashboardApi } from "../api";
+import "../style/divisiondashboard.css";
+import Dashboard from "../components/monthdashboard";
+import DivisionGraph from "../components/DivisionGraph";
 
 interface Month {
   name: string;
@@ -22,7 +29,8 @@ interface Stats {
   total_training_hours: number;
 }
 
-interface DivisionDashboardProps {
+interface DivisionDashboardData {
+  year: number;
   currentYear: number;
   username: string;
   role: string;
@@ -32,67 +40,99 @@ interface DivisionDashboardProps {
   branches: Branch[];
 }
 
-const DivisionDashboard: React.FC<DivisionDashboardProps> = ({
-  currentYear,
-  username,
-  role,
-  branchesCount,
-  stats,
-  months,
-  branches,
-}) => {
+const DivisionDashboard: React.FC = () => {
+  const [data, setData] = useState<DivisionDashboardData | null>(null);
+
+  // ✅ Get token & user from Redux
+  const token = useSelector((state: any) => state.auth.token);
+  const user = useSelector((state: any) => state.auth.user);
+
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+      try {
+        const result = await dashboardApi.getDivisionDashboard(token);
+        setData(result as DivisionDashboardData);
+      } catch (error) {
+        console.error("Error loading division dashboard:", error);
+      }
+    };
+    fetchData();
+  }, [token]);
+
+  if (!data) return <div className="loader-container">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+      {/* Blue Header */}
+      <nav className="blue_header">
+        <div className="nav-text">
+          <h2>Division Dashboard for {user?.manager_name}</h2>
+        </div>
+      </nav>
+      <div className="loader"></div>
+      {/* Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
+        </div>
+      
+      <p className="loading-text">Loading Division Data...</p>
+    </div>;
+
   return (
-    <div className="container my-4">
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-primary">Division Dashboard – {currentYear}</h2>
-        <div>
-          Logged in as <strong>{username}</strong> ({role})
-        </div>
+    <div className="division-dashboard">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
       </div>
 
-      {/* KPI Cards */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Branches</h6>
-            <h3>{branchesCount}</h3>
-          </div>
+      {/* Fixed Navigation */}
+      <nav className="blue_header">
+        <div className="nav-text">
+        <h2> Division Dashboard for {user?.manager_name}</h2> 
         </div>
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Avg Energy (kWh)</h6>
-            <h3>{stats.avg_energy_kwh || 0}</h3>
-          </div>
+      </nav> 
+
+      <div className="dashboard-layout">
+        {/* Fixed Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
         </div>
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Total Energy Bill</h6>
-            <h3>₹ {stats.total_energy_bill || 0}</h3>
+
+        {/* Scrollable Content */}
+        <div className="scrollable-content">
+          {/* Welcome Section */}
+          <div className="welcome-section">
+            <h2>Welcome, {user?.manager_name}</h2>
+            <p>Last logged in on {new Date().toLocaleDateString()}</p>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 shadow-sm">
-            <h6 className="mb-1">Training Hours</h6>
-            <h3>{stats.total_training_hours || 0}</h3>
+
+          {/* Division Scroll Component - Metrics Cards */}
+          <div className="division-scroll-section">
+            <DivisionScroll />
+          </div>
+
+          {/* Division Graph */}
+          <div className="dashboard-graph">
+            <div className="graph-wrapper">
+              <DivisionGraph />
+            </div>
+          </div>
+
+          {/* Month Dashboard */}
+          <div className="dashboard-main">
+            <div className="dashboard-right">
+              <Dashboard months={data.months} year={data.year} />
+            </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      {/* Generate Report */}
-      <div className="mb-4 text-center">
-        <button
-          className="btn btn-primary btn-lg"
-          onClick={() => {
-            // replace with actual API navigation
-            window.location.href = "/generate-brsr";
-          }}
-        >
-                    📊 Generate BRSR Report
-                  </button>
-                </div>
-              </div>
-            );
-          };
-          
-          export default DivisionDashboard;
+export default DivisionDashboard;
