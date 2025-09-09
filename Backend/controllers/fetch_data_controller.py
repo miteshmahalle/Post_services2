@@ -307,8 +307,10 @@ def get_division_report(current_user):   # ✅ renamed function
                 br.total_waste_kg       AS avg_waste_kg,
                 br.avg_water_litres     AS avg_water_litres,
                 br.total_training_hours AS avg_training_hours,
-                br.avg_complaint_count      AS avg_complaints_count
+                br.avg_complaint_count      AS avg_complaints_count,
+                b.address                AS address
             FROM brsr_reports br
+            Left Join branches b ON br.district_id = b.branch_id
             WHERE br.district_id = %s
         """
 

@@ -14,6 +14,7 @@ interface SubmittedReport {
   file_path: string;
   created_at: string;
   generated_by_user: string;
+  address?: string;
 }
 
 const Circletable: React.FC = () => {
