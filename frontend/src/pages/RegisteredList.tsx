@@ -98,9 +98,25 @@ const RegisteredList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="registered-list-container">
-        <div className="loading">Loading...</div>
+      <div className="loader-container">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
       </div>
+
+      {/* Blue Header */}
+      <nav className="blue_header">
+        <div className="nav-text">
+          <h2>Division Reports for {user?.manager_name}</h2>
+        </div>
+      </nav>
+      <div className="loader"></div>
+      {/* Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
+        </div>
+      <p className="loading-text">Loading Division Data...</p>
+    </div>
     );
   }
 

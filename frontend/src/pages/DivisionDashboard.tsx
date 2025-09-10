@@ -63,8 +63,24 @@ const DivisionDashboard: React.FC = () => {
   }, [token]);
 
   if (!data) return <div className="loader-container">
+      {/* Fixed Header */}
+      <div className="fixed-header">
+        <Header />
+      </div>
+
+      {/* Blue Header */}
+      <nav className="blue_header">
+        <div className="nav-text">
+          <h2>Division Dashboard for {user?.manager_name}</h2>
+        </div>
+      </nav>
       <div className="loader"></div>
-      <p className="loading-text">Loading Division Report...</p>
+      {/* Sidebar */}
+        <div className="fixed-sidebar">
+          <DivisionSidebar />
+        </div>
+      
+      <p className="loading-text">Loading Division Data...</p>
     </div>;
 
   return (

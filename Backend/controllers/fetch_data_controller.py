@@ -227,6 +227,7 @@ def get_submitted_reports(current_user):
                 b.branch_name as division_name,
                 b.manager_name,
                 b.phone,
+                b.address,
                 br.created_at,
                 u.username as generated_by_user
             FROM brsr_reports br
@@ -276,6 +277,51 @@ def check_submission_status(current_user):
         else:
             return jsonify({"has_submitted": False})
             
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+
+        
+@bp.route('/division_report', methods=['GET'])
+@token_required
+def get_division_report(current_user):   # ✅ renamed function
+    if current_user['role'] != 'circle':
+        return jsonify({"error": "Unauthorized - Only circle officers can view reports"}), 403
+    
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    division_id = request.args.get("division_id")   # ✅ fixed variable name
+
+    try:
+        query = """
+            SELECT 
+                YEAR(br.reporting_month) AS year,
+                br.report_id,
+                br.total_energy_bill    AS avg_energy_bill,
+                br.avg_energy_kwh       AS avg_energy_kwh,
+                br.avg_fuel_litres      AS avg_fuel_litres,
+                br.avg_paper_reams      AS avg_paper_reams,
+                br.total_waste_kg       AS avg_waste_kg,
+                br.avg_water_litres     AS avg_water_litres,
+                br.total_training_hours AS avg_training_hours,
+                br.avg_complaint_count      AS avg_complaints_count,
+                b.address                AS address
+            FROM brsr_reports br
+            Left Join branches b ON br.district_id = b.branch_id
+            WHERE br.district_id = %s
+        """
+
+        cur.execute(query, (division_id,))
+        rows = cur.fetchall()
+
+        return jsonify({
+            "division_id": division_id,
+            "averages": rows
+        })
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
