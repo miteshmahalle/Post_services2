@@ -15,6 +15,7 @@ Every month, Branch, Division, and Circle users report ESG metrics, which are co
              Flask-JWT-Extended
              MySQL Connector 
              REST APIs using Flask Blueprint architecture
+
    
     Authentication:-
              JWT for authentication
@@ -22,29 +23,27 @@ Every month, Branch, Division, and Circle users report ESG metrics, which are co
              Role-based access control (RBAC)
 
 3.Core Features:-
-
-                 Role-based login: Branch / Division / Circle
-                 Monthly ESG data submission
-                 Auto-generated fi<img width="1366" height="768" alt="Screenshot (107)" src="https://github.com/user-attachments/assets/e0f9f23c-6943-49fa-b1ac-7fae8a5d7f4b" />
-nal BRSR report
-                 Analytical dashboards with charts & summaries
-                 Secure login, token validation & protected routes
-                 API-driven modular architecture
-                 Optimized form handling & data validation
+    Role-based login: Branch / Division / Circle
+    Monthly ESG data submission
+    Auto-generated final BRSR report
+    Analytical dashboards with charts & summaries
+    Secure login, token validation & protected routes
+    API-driven modular architecture
+    Optimized form handling & data validation
 
 4.User Roles & Workflow:-
-                          1. Branch User:- 
-                                        Submits monthly ESG forms
-                                        Views Branch-level analytic
+   1. Branch User:- 
+            Submits monthly ESG forms
+            Views Branch-level analytic
                                            
-                          2. Division User:-
-                                        Approves & monitors Branch submissions
-                                        Submits Division-level ESG data
-
-                          3. Circle User:-
-                                        Monitors all Divisions
-                                        Generates and reviews final consolidated BRSR report
-6. 🔗 REST API Flow (Client ↔ Server)
+   2. Division User:-
+            Approves & monitors Branch submissions
+            Submits Division-level ESG data
+  
+   3. Circle User:-
+            Monitors all Divisions
+            Generates and reviews final consolidated BRSR report
+6.REST API Flow (Client ↔ Server)
 
 React frontend communicates with Flask using REST APIs over HTTP/HTTPS.
 
@@ -58,13 +57,6 @@ Frontend Stores Token
 → Redux state
 → Local/session storage
 
-Authenticated API Requests
-Example:
-
-GET /api/esg/branch/monthly  
-Headers: Authorization: Bearer <JWT_TOKEN>
-
-
 Backend Validates Token
 → Decodes JWT
 → Extracts user_id & role
@@ -73,3 +65,6 @@ Backend Validates Token
 Database Query & Response
 → Backend fetches/updates MySQL
 → Sends structured JSON response
+
+<img width="1366" height="768" alt="Screenshot (107)" src="https://github.com/user-attachments/assets/f7d6a4ca-f234-496d-ba37-05dce901281b" />
+<img width="1366" height="768" alt="Screenshot (108)" src="https://github.com/user-attachments/assets/7f109fd3-1af6-4f7a-aef6-6d8247350590" />
