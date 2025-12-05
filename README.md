@@ -68,3 +68,9 @@ Database Query & Response
 
 <img width="1366" height="768" alt="Screenshot (107)" src="https://github.com/user-attachments/assets/f7d6a4ca-f234-496d-ba37-05dce901281b" />
 <img width="1366" height="768" alt="Screenshot (108)" src="https://github.com/user-attachments/assets/7f109fd3-1af6-4f7a-aef6-6d8247350590" />
+<img width="1366" height="768" alt="Screenshot (110)" src="https://github.com/user-attachments/assets/5d30e73a-4a06-4aea-b278-c7bd9740717d" />
+<img width="1366" height="768" alt="Screenshot (110)" src="https://github.com/user-attachments/assets/1d5ef84f-441a-4b9a-92d1-6dbf66a5fb73" />
+<img width="1366" height="768" alt="Screenshot (111)" src="https://github.com/user-attachments/assets/bda0454f-2d83-4c83-9ba2-22b761d8530a" />
+<img width="1366" height="768" alt="Screenshot (113)" src="https://github.com/user-attachments/assets/785907b4-02d9-4a06-830a-caf7d038d947" />
+<img width="1366" height="768" alt="Screenshot (114)" src="https://github.com/user-attachments/assets/06f384d4-253c-4c90-8fce-7a75d288599b" />
+<img width="1366" height="768" alt="Screenshot (115)" src="https://github.com/user-attachments/assets/80ecc2b4-48cf-4d67-b50b-76e7f0a6cc4f" />
