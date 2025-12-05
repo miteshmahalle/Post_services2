@@ -21,7 +21,7 @@ Every month, Branch, Division, and Circle users report ESG metrics, which are co
              CORS middleware
              Role-based access control (RBAC)
 
-3.Core Features:-<img width="1366" height="768" alt="Screenshot (108)" src="https://github.com/user-attachments/assets/60c37d61-b74a-4e15-a04b-2d39eddb61d8" />
+3.Core Features:-
 
                  Role-based login: Branch / Division / Circle
                  Monthly ESG data submission
