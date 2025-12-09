@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../slices/authSlice";
-import "./style/Header.css"; 
+import "./style/Header.css"
 import logo from "../images/India-Post-Color.png";
 
 const Header: React.FC = () => {
