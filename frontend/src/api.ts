@@ -3,7 +3,7 @@ import axios from "axios";
 import { User } from "./slices/authSlice"; // adjust if needed
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 // ---------------- Response Handler ----------------
