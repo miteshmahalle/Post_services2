@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+from config import SECRET_KEY
 import os
 
 # Import blueprints from controllers
@@ -14,11 +15,10 @@ from controllers import (
 )
 
 app = Flask(__name__)
-app.secret_key = "my_super_secret_key_12345"
+app.secret_key = SECRET_KEY
 
 # Enable CORS so React can call Flask APIs
-CORS(app)
-
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 # Register Blueprints
 app.register_blueprint(auth_controller.bp, url_prefix="/api/auth")
 app.register_blueprint(dashboard_controller.bp, url_prefix="/api/dashboard")
