@@ -1,1 +1,3 @@
 venv/
+# Ignore environment files
+Backend/.env

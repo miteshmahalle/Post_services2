@@ -1,10 +1,14 @@
-# Backend/config.py
+from dotenv import load_dotenv
+import os
+
+# Load .env
+load_dotenv()
+
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'flaskuser',
-    'password': '1234',        # <-- same password you used
-    'database': 'Postal_system'
+    'host': os.getenv("DB_HOST"),
+    'user': os.getenv("DB_USER"),
+    'password': os.getenv("DB_PASSWORD"),
+    'database': os.getenv("DB_NAME")
 }
 
-# Secret key for sessions (for Flask-JWT or session management)
-SECRET_KEY = 'my_super_secret_key_12345'
+SECRET_KEY = os.getenv("SECRET_KEY")
