@@ -8,7 +8,13 @@ SECRET_KEY = config.SECRET_KEY
 bp = Blueprint('validate', __name__)
 
 def get_db_connection():
-    return mysql.connector.connect(**config.DB_CONFIG)
+    return mysql.connector.connect(
+    host=config.DB_CONFIG['host'],
+    user=config.DB_CONFIG['user'],
+    password=config.DB_CONFIG['password'],
+    database=config.DB_CONFIG['database'],
+    port=config.DB_CONFIG['port']
+    )
 
 
 @bp.route('/registration', methods=['POST'])
