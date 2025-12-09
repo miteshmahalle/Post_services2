@@ -64,3 +64,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+.env
+Backend/.env
