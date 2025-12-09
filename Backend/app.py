@@ -36,4 +36,4 @@ def health():
     return jsonify({"status": "ok", "message": "API running"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
