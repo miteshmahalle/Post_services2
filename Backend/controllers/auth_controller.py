@@ -177,8 +177,8 @@ def login():
             b.parent_id,
             b.address,
             u.password_hash
-        FROM postal_system.users u
-        LEFT JOIN postal_system.branches b 
+        FROM railway.users u
+        LEFT JOIN railway.branches b 
             ON u.branch_id = b.branch_id
         WHERE u.username = %s
     """, (username,))
@@ -252,8 +252,8 @@ def get_profile(current_user):   # ✅ must accept current_user
                 b.address,
                 b.pincode,
                 b.state
-            FROM postal_system.users u
-            LEFT JOIN postal_system.branches b 
+            FROM railway.users u
+            LEFT JOIN railway.branches b 
                 ON u.branch_id = b.branch_id
             WHERE u.user_id = %s
         """, (user_id,))
@@ -347,8 +347,8 @@ def update_profile(current_user):   # ✅ Accept current_user here
                 b.address,
                 b.pincode,
                 b.state
-            FROM postal_system.users u
-            LEFT JOIN postal_system.branches b 
+            FROM railway.users u
+            LEFT JOIN railway.branches b 
                 ON u.branch_id = b.branch_id
             WHERE u.user_id = %s
         """, (user_id,))
@@ -404,7 +404,7 @@ def change_password(current_user):
         # Get user's current password hash
         cur.execute("""
             SELECT password_hash 
-            FROM postal_system.users 
+            FROM railway.users 
             WHERE user_id = %s
         """, (current_user['user_id'],))
         user = cur.fetchone()
@@ -421,7 +421,7 @@ def change_password(current_user):
         
         # Update password in database
         cur.execute("""
-            UPDATE postal_system.users 
+            UPDATE railway.users 
             SET password_hash = %s 
             WHERE user_id = %s
         """, (new_password_hash, current_user['user_id']))
