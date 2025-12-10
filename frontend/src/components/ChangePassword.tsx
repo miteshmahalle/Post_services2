@@ -64,9 +64,9 @@ const ChangePassword: React.FC = () => {
           new_password: '',
           confirm_password: ''
         });
-      } else {
-        setMessage(response.error || 'Failed to change password');
-        setIsSuccess(false);
+      // } else {
+      //   setMessage(response.error || 'Failed to change password');
+      //   setIsSuccess(false);
       }
     } catch (error: any) {
       setMessage(error.response?.data?.error || 'Failed to change password');
