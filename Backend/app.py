@@ -40,5 +40,5 @@ if not os.path.exists('reports'):
 def health():
     return jsonify({"status": "ok", "message": "API running"})
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
