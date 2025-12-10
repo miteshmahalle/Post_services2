@@ -19,7 +19,7 @@ app.secret_key = SECRET_KEY
 
 # Enable CORS so React can call Flask APIs
 CORS(app,
-     resources={r"/*": {"origins": "https://post-services2.vercel.app"}},
+     resources={r"/api/*": {"origins": "https://post-services2.vercel.app"}},
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
