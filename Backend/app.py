@@ -18,9 +18,11 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
 # Enable CORS so React can call Flask APIs
-CORS(app, resources={r"/api/*": {"origins": ["https://post-services2.vercel.app",
-                                             "http://post-services2.vercel.app"
-                                             ]}}, supports_credentials=True)
+CORS(app,
+     resources={r"/*": {"origins": "https://post-services2.vercel.app"}},
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 # Register Blueprints
 app.register_blueprint(auth_controller.bp, url_prefix="/api/auth")
 app.register_blueprint(dashboard_controller.bp, url_prefix="/api/dashboard")
